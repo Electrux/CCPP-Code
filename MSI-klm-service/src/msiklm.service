@@ -1,0 +1,13 @@
+[Unit]
+Description=MSI Keyboard Light Manager
+After=multi-user.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/msiklmservice
+TimeoutSec=0
+StandardOutput=syslog
+PIDFile=/var/run/msiklmservice.pid
+
+[Install]
+WantedBy=multi-user.target
