@@ -1,3 +1,4 @@
+#include <iostream>
 #include "NodeList.hpp"
 
 namespace Electrux

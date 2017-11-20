@@ -2,9 +2,6 @@
 #include <vector>
 #include <map>
 
-
-
-
 namespace Electrux
 {
 	struct Node
