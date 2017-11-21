@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
-
+//#define LOOP_COLORS
 #include "../include/Core.hpp"
 
 int main()
 {
 	GraphicsEngine engine;
 
-	engine.initgraph( 1920, 1080 );
+	engine.initgraph( 1980, 1080 );
 
 	std::vector< sf::Vector2i > polygonpoints;
 
