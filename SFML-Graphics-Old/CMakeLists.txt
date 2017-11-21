@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/myname.cpp)
+set(SOURCE_FILES src/breslinemain.cpp)
 add_executable(SFML-Graphics-Old ${SOURCE_FILES})
 
 find_package(SFML REQUIRED system window graphics network audio)

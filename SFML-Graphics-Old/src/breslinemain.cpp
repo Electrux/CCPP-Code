@@ -11,16 +11,23 @@ void applybresline( GraphicsEngine &core,
 
 	float m = ( dx == 0 ) ? 1.0 : dy / ( float )dx;
 
-       	float tot_err = 0.0;
+	if( m > 1 ) {
+		int temp = dy;
+		dy = dx;
+		dx = temp;
+	}
+	
+	float p = 2 * dy - dx;
 	
 	while ( x1 != x2 || y1 != y2 ) {
 		core.putpixel( x1, y1 );
 
-		tot_err += m;
-
-		if ( tot_err >= 0.5 ) {
+		if( p < 0 ) {
+			p = p + 2 * dy;
+		}
+		else {
+			p = p + 2 * dy - 2 * dx;
 			y1++;
-			tot_err--;
 		}
 
 		if ( dx != 0 )
