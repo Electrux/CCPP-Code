@@ -1,3 +1,7 @@
+# Build files #
+###############
+build/
+
 # Compiled source #
 ###################
 *.com
