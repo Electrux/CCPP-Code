@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PRIORITY
-
 #include "../include/process.h"
 #include "../include/funcs.h"
 
@@ -13,9 +11,9 @@ int main()
 	printf( "Enter number of processes: " );
 	scanf( "%d", & count );
 
-	struct Process * processes;
+	struct Process ** processes;
 
-	processes = ( struct Process * )
+	processes = ( struct Process ** )
 		malloc( sizeof( * processes ) * count );
 
 	for( int i = 0; i < count; ++i ) {
@@ -24,13 +22,16 @@ int main()
 		processes[ i ] = create_process();
 	}
 
-	sortmaxpriority( processes, count );
+	sortmincpu( processes, count );
 
 	for( int i = 0; i < count; ++i )
-		display_process( & processes[ i ] );
+		display_process( processes[ i ] );
 	
 	printf( "Average wait time is: %.2f\n",
-		calc_wait_time( processes, count ) );
+		calc_basic_wait_time( processes, count ) );
+
+	for( int i = 0; i < count; ++i )
+		free( processes[ i ] );
 
 	free( processes );
 	
