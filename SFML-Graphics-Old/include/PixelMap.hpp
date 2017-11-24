@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-//#define LOOP_COLORS
+#define LOOP_COLORS
 
 #ifdef LOOP_COLORS
 

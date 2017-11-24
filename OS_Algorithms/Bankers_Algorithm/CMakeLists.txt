@@ -7,6 +7,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 
 set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES src/main.c)
+set(SOURCE_FILES ./src/main.c)
 add_executable(Bankers_Algorithm ${SOURCE_FILES})
 
