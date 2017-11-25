@@ -1,0 +1,3 @@
+Don't use system( "clear" ); in C/C++ in Mac OS.
+Causes random Seg Faults in printf statements...
+Works on Linux properly though :/
