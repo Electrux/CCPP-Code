@@ -1,3 +1,9 @@
 Don't use system( "clear" ); in C/C++ in Mac OS.
 Causes random Seg Faults in printf statements...
 Works on Linux properly though :/
+
+Update:
+That was actually fault of deallocating memory before the usage of data..
+-_-
+Anyways, still, use system(...) only if extremely needed and find a better solution
+for clearing screen than that...
