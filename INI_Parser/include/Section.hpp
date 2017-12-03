@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "./DataVars.hpp"
+#include "DataVars.hpp"
 
 namespace Electrux
 {

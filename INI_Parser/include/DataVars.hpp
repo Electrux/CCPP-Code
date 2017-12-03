@@ -5,6 +5,8 @@
 #ifndef INI_PARSER_ENUMS_HPP
 #define INI_PARSER_ENUMS_HPP
 
+#include <string>
+
 namespace Electrux
 {
 	enum STATUS_CODES

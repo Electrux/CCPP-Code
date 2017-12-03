@@ -10,8 +10,8 @@
 #include <vector>
 #include <map>
 #include <memory>
-#include "./DataVars.hpp"
-#include "./Section.hpp"
+#include "DataVars.hpp"
+#include "Section.hpp"
 
 namespace Electrux
 {
@@ -33,14 +33,18 @@ namespace Electrux
 		bool GetSectionFromLine( const std::string &line, std::string &section );
 		
 		// Break a line into key and value pair ( This will omit spaces as well ).
-		bool GetKeyValPairFromString( const std::string &str, std::string &key, std::string &val );
+		bool GetKeyValPairFromString( const std::string &str,
+					      std::string &key,
+					      std::string &val );
 		
 		// Check if the opened file is empty.
 		bool IsFileEmpty( std::ifstream &file );
 		
 		// Sets the last status code to be used in case something goes wrong.
-		// Returns the same error code as parameter so that it can be used in return statements.
-		STATUS_CODES SetLastStatusCode( STATUS_CODES code, const std::string &curr_func_name );
+		// Returns the same error code as parameter so that it can be used in
+		// return statements.
+		STATUS_CODES SetLastStatusCode( STATUS_CODES code,
+						const std::string &curr_func_name );
 		
 	public:
 		
@@ -63,22 +67,40 @@ namespace Electrux
 		bool SectionExists( const std::string &section );
 		
 		// Insert new data { String, Int, Float }.
-		STATUS_CODES SetDataString( const std::string &section, const std::string &key, const std::string &val );
-		STATUS_CODES SetDataInt( const std::string &section, const std::string &key, const int &val );
-		STATUS_CODES SetDataFloat( const std::string &section, const std::string &key, const float &val );
+		STATUS_CODES SetDataString( const std::string &section,
+					    const std::string &key,
+					    const std::string &val );
+		STATUS_CODES SetDataInt( const std::string &section,
+					 const std::string &key,
+					 const int &val );
+		STATUS_CODES SetDataFloat( const std::string &section,
+					   const std::string &key,
+					   const float &val );
 		
 		// Update already existing data { String, Int, Float }.
-		STATUS_CODES UpdateDataString( const std::string &section, const std::string &key, const std::string &val );
-		STATUS_CODES UpdateDataInt( const std::string &section, const std::string &key, const int &val );
-		STATUS_CODES UpdateDataFloat( const std::string &section, const std::string &key, const float &val );
+		STATUS_CODES UpdateDataString( const std::string &section,
+					       const std::string &key,
+					       const std::string &val );
+		STATUS_CODES UpdateDataInt( const std::string &section,
+					    const std::string &key,
+					    const int &val );
+		STATUS_CODES UpdateDataFloat( const std::string &section,
+					      const std::string &key,
+					      const float &val );
 		
 		// Delete already existing data.
 		STATUS_CODES DeleteData( const std::string &section, const std::string &key );
 		
 		// Fetch already existing data { String, Int, Float }.
-		STATUS_CODES GetDataString( const std::string &section, const std::string &key, std::string &store_location );
-		STATUS_CODES GetDataInt( const std::string &section, const std::string &key, int &store_location );
-		STATUS_CODES GetDataFloat( const std::string &section, const std::string &key, float &store_location );
+		STATUS_CODES GetDataString( const std::string &section,
+					    const std::string &key,
+					    std::string &store_location );
+		STATUS_CODES GetDataInt( const std::string &section,
+					 const std::string &key,
+					 int &store_location );
+		STATUS_CODES GetDataFloat( const std::string &section,
+					   const std::string &key,
+					   float &store_location );
 		
 		// Retrieve last occured error as string or its code, or display it.
 		// Prefer using Display because it automatically prints to std::cerr if
