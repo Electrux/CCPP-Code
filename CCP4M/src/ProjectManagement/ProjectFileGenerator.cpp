@@ -8,7 +8,19 @@
 
 int GenerateProjectFiles( ProjectData & data )
 {
-	std::cout << "Data.dir: " << data.dir << "\n";
+	std::cout << "Project:\n\tName: " << data.name
+		  << "\n\tDirectory: " << data.dir
+		  << "\n\tDependencies: ";
+
+	if( !data.deps.empty() ) {
+		for( auto dep : data.deps )
+			std::cout << dep << ", ";
+		std::cout << "\b \n\n";
+	}
+	else {
+		std::cout << "NONE\n\n";
+	}
+
 	std::string proj_dir, proj_src, proj_inc, proj_build;
 
 	SetFolderPaths( data.dir, data.name, proj_dir, proj_src, proj_inc, proj_build );

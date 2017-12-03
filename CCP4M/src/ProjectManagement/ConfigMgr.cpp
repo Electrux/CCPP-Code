@@ -31,6 +31,7 @@ int ConfigMgr::CreateDefaultFile( std::string project_dir )
 	parser.SetDataString( "Core", "Libs", concatlibs );
 	parser.SetDataString( "Core", "OtherFlags", "" );
 	parser.SetDataString( "Core", "Std", "c++14" );
+	parser.SetDataString( "Core", "Src", "main.cpp" );
 
 	parser.CreateSection( "Deps" );
 	for( auto lib : data.deps ) {

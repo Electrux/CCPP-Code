@@ -74,6 +74,9 @@ ProjectData GetProjectData( std::vector< std::string > & args )
 		}
 	}
 
+	if( !founddir )
+		data.dir = ".";
+
 	if( invalidformat ) {
 
 		if( data.name.empty() ) {
