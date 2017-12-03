@@ -7,6 +7,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/main.cpp)
+file(GLOB SOURCE_FILES src/INI_System/*.cpp src/ProjectManagement/*.cpp src/*.cpp)
 add_executable(CCP4M ${SOURCE_FILES})
 
