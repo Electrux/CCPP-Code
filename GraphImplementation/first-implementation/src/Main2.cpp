@@ -1,8 +1,7 @@
 #include <iostream>
-#include <cstdarg>
 #include <vector>
 #include <map>
-#include "Graph.hpp"
+#include "../include/Graph.hpp"
 
 
 int main()
@@ -73,6 +72,6 @@ int main()
 	graph.disp_node_tree(sd.path);
 	std::cout << "\n\n";
 	*/
-	system("pause");
+
 	return 0;
 }

@@ -1,4 +1,4 @@
-#include "Graph.hpp"
+#include "../include/Graph.hpp"
 
 namespace Electrux
 {

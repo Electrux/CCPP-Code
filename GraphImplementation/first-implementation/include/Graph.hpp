@@ -40,6 +40,6 @@ namespace Electrux
 		Graph generateKruskalGraph();
 		void arrangeVisits(std::vector<mnode> &vec);
 		bool findInVector(std::vector<mnode> &vec, int id);
-		friend std::ostream & Graph::operator << (std::ostream &os, const Graph &graph);
+		friend std::ostream & operator << (std::ostream &os, const Graph &graph);
 	};
 }

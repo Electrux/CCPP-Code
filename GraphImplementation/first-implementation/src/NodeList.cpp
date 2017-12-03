@@ -1,4 +1,4 @@
-#include "NodeList.hpp"
+#include "../include/NodeList.hpp"
 
 namespace Electrux
 {

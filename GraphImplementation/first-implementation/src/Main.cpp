@@ -2,7 +2,7 @@
 #include <cstdarg>
 #include <vector>
 #include <map>
-#include "Graph.hpp"
+#include "../include/Graph.hpp"
 
 
 int main()
@@ -25,10 +25,15 @@ int main()
 	graph.add_edge(6, 4, 1);
 	graph.add_edge(6, 5, 4);
 	
-	auto sd = graph.getShortestDistances(1, 4);
-	std::cout << "Shortest distance: " << sd[4] << "\n";
+	auto sd = graph.getShortestPath(1, 4);
 
-	system("pause");
+	std::cout << "Shortest path: ";
+	for( auto node : sd.path )
+		std::cout << node << "->";
+	std::cout << "\b\b  \n";
+
+	std::cout << "Distance: " << sd.dist << "\n";
+
 	return 0;
 }
 
