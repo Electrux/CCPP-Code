@@ -15,7 +15,7 @@ namespace Electrux
 	template < typename T >
 	class HashKey
 	{
-		int table;
+		COUNTTYPE table;
 		T key;
 
 		// Generate the hash value from the member variable - key.
@@ -45,14 +45,14 @@ namespace Electrux
 		}
 
 		// Fetch the table in which this key resides.
-		int GetTable() const
+		COUNTTYPE GetTable() const
 		{
 			return table;
 		}
 
 		// Overloaded operator which returns the hash value.
 		// This enables the (semi) Generalization of the HashKey class.
-		int operator ()() const
+		COUNTTYPE operator ()() const
 		{
 			return hashval;
 		}

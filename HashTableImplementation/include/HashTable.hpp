@@ -14,19 +14,20 @@
 
 namespace Electrux
 {
-	template <typename T, typename U >
+	template < typename T, typename U >
 	class HashTable
 	{
-		int size;
+		// Max values per table.
+		COUNTTYPE size;
 
-		Table< U > *tables[MAX_TABLES];
+		Table< U > *tables[ MAX_TABLES ];
 		Stack *freespaces;
 
-		int *lastlocfilled;
+		COUNTTYPE *lastlocfilled;
 
-		int ctr;
+		COUNTTYPE ctr;
 
-		int netcount;
+		size_t netcount;
 
 	public:
 
@@ -37,10 +38,10 @@ namespace Electrux
 			size = TABLE_SIZE;
 
 			tables[ ctr ] = new Table< U >( size );
-			lastlocfilled = new int[ size ];
+			lastlocfilled = new COUNTTYPE[ size ];
 			freespaces = new Stack[ size ];
 
-			for( int i = 0; i < size; ++i )
+			for( COUNTTYPE i = 0; i < size; ++i )
 				lastlocfilled[ i ] = -1;
 
 			netcount = 0;
@@ -48,7 +49,7 @@ namespace Electrux
 
 		~HashTable()
 		{
-			for( int i = 0; i <= ctr; ++i )
+			for( COUNTTYPE i = 0; i <= ctr; ++i )
 				delete tables[ i ];
 
 			delete[] lastlocfilled;
@@ -56,14 +57,14 @@ namespace Electrux
 
 		bool Insert( HashKey< T > &key, U val )
 		{
-			int loc = key();
+			COUNTTYPE loc = key();
 
 			if( lastlocfilled[ loc ] == MAX_TABLES - 1 ) {
 				return false;
 			}
 
-			int freespace = freespaces[ loc ].Pop();
-			if( freespace != INT_MIN )
+			COUNTTYPE freespace = freespaces[ loc ].Pop();
+			if( freespace != -16384 )
 			{
 				tables[ freespace ]->Insert( loc, val );
 				key.SetTable( freespace );
@@ -73,7 +74,7 @@ namespace Electrux
 				lastlocfilled[ loc ]++;
 
 				if( lastlocfilled[ loc ] > ctr ) {
-					tables[ lastlocfilled[ loc ]] = new Table< U >( size );
+					tables[ lastlocfilled[ loc ] ] = new Table< U >( size );
 					ctr++;
 				}
 
@@ -89,7 +90,7 @@ namespace Electrux
 
 		bool Delete( HashKey< T > &key )
 		{
-			int loc = key();
+			COUNTTYPE loc = key();
 
 			if( tables[ key.GetTable() ]->Delete( loc ) ) {
 				netcount--;
@@ -106,8 +107,6 @@ namespace Electrux
 		{
 			if( key.GetTable() < 0 ) return T();
 
-			int loc = key();
-
 			return tables[ key.GetTable() ]->Get( key() );
 		}
 
@@ -116,7 +115,7 @@ namespace Electrux
 			return netcount;
 		}
 
-		int GetCtr()
+		COUNTTYPE GetCtr()
 		{
 			return ctr;
 		}

@@ -12,16 +12,16 @@ namespace Electrux
 {
 	class Stack
 	{
-		int *stack;
-		int top;
-		int stacksize;
+		COUNTTYPE *stack;
+		COUNTTYPE top;
+		COUNTTYPE stacksize;
 
 	public:
 
-		Stack( int size = MAX_TABLES )
+		Stack( COUNTTYPE size = MAX_TABLES )
 		{
 			stacksize = size;
-			stack = new int[size];
+			stack = new COUNTTYPE[ size ];
 			top = -1;
 		}
 
@@ -30,7 +30,7 @@ namespace Electrux
 			delete[] stack;
 		}
 
-		bool Push( int data )
+		bool Push( COUNTTYPE data )
 		{
 			if( top == stacksize - 1 )
 				return false;
@@ -42,9 +42,9 @@ namespace Electrux
 			return true;
 		}
 
-		int Pop()
+		COUNTTYPE Pop()
 		{
-			if( top < 0 ) return INT_MIN;
+			if( top < 0 ) return -16384;
 
 			return stack[ top-- ];
 		}

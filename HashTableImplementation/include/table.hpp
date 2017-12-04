@@ -6,6 +6,7 @@
 #define HASHTABLEIMPLEMENTATION_TABLE_HPP
 
 #include <string>
+#include "Constants.hpp"
 
 namespace Electrux
 {
@@ -14,15 +15,15 @@ namespace Electrux
 	{
 		// Array of datatype ( T ) which are to be stored.
 		T *data;
-		int size;
+		COUNTTYPE size;
 		bool *isfilled;
 
 	public:
 
-		Table( int datasize )
+		Table( COUNTTYPE datasize )
 		{
 			size = datasize;
-			data = new T[datasize];
+			data = new T[ datasize ];
 
 			// Defaults to zero.Z
 			isfilled = new bool[ datasize ];
@@ -34,28 +35,27 @@ namespace Electrux
 			delete[] isfilled;
 		}
 
-		bool Insert( int loc, T data )
+		bool Insert( COUNTTYPE loc, T data )
 		{
-			if( loc >= size ) return false;
-
-			if( isfilled[ loc ] ) return false;
+			if( loc >= size ||  isfilled[ loc ] )
+				return false;
 
 			this->data[ loc ] = data;
 
 			return true;
 		}
 
-		bool Delete( int loc )
+		bool Delete( COUNTTYPE loc )
 		{
-			if( loc >= size ) return false;
-			if( !isfilled[ loc ] ) return false;
+			if( loc >= size || !isfilled[ loc ] )
+				return false;
 
 			data[ loc ].clear();
 
 			return true;
 		}
 
-		const T &Get( int loc )
+		const T &Get( COUNTTYPE loc )
 		{
 			if( loc >= size ) return T();
 			if( !isfilled[ loc ] ) return T();
