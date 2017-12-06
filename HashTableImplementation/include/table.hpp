@@ -17,6 +17,7 @@ namespace Electrux
 		T *data;
 		COUNTTYPE size;
 		bool *isfilled;
+		T defaulter;
 
 	public:
 
@@ -55,10 +56,10 @@ namespace Electrux
 			return true;
 		}
 
-		const T &Get( COUNTTYPE loc )
+		const T & Get( COUNTTYPE loc )
 		{
-			if( loc >= size ) return T();
-			if( !isfilled[ loc ] ) return T();
+			if( loc >= size || !isfilled[ loc ] )
+				return defaulter;
 
 			return data[ loc ];
 		}

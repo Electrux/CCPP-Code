@@ -29,6 +29,8 @@ namespace Electrux
 
 		size_t netcount;
 
+		T defaulter;
+
 	public:
 
 		HashTable()
@@ -103,9 +105,9 @@ namespace Electrux
 			return false;
 		}
 
-		std::string Get( const HashKey< T > &key )
+		const T & Get( const HashKey< T > &key )
 		{
-			if( key.GetTable() < 0 ) return T();
+			if( key.GetTable() < 0 ) return defaulter;
 
 			return tables[ key.GetTable() ]->Get( key() );
 		}
