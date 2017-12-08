@@ -4,10 +4,13 @@
 
 #include "../../include/CommonFuncs.hpp"
 #include "../../include/ColorDefs.hpp"
+#include "../../include/UTFChars.hpp"
 
 #include "../../include/ProjectManagement/ProjectData.hpp"
 #include "../../include/ProjectManagement/FSFuncs.hpp"
 #include "../../include/ProjectManagement/ConfigMgr.hpp"
+#include "../../include/ProjectManagement/ExecuteCommand.hpp"
+#include "../../include/ProjectManagement/CompileCommandData.hpp"
 
 #include "../../include/ProjectManagement/BuildFilesGenerator.hpp"
 
@@ -32,31 +35,24 @@ int GenerateBuildFiles()
 
 	int filecount = othersrc.size() + ( ( mainsrc.empty() ) ? 0 : 1 );
 
-	float percent = 0.0, percentdelta = 100.0 / filecount;
-
 	if( !othersrc.empty() )
 		std::cout << std::endl;
 
+	std::vector< CCData > commands;
 	for( auto othersource : othersrc ) {
-
-		percent += percentdelta;
 
 		std::string compilestr =
 			"clang++ -c" + flags + "-std=" + standard
 			+ " -o build/buildfiles/" + othersource
 			+ ".o src/" + othersource + libs;
 
-		std::cout << "[" << ( int )percent << "%]\t"
-			  << YELLOW << "Building CXX object: "
-			  << CYAN << "build/buildfiles/" << othersource << ".o"
-			  << RESET << "\n";
-
-		std::system( compilestr.c_str() );
+		commands.push_back( { othersource, compilestr } );
 	}
 
-	if( !mainsrc.empty() ) {
+	if( ExecuteAllCommands( commands, filecount ) != 0 )
+		return 1;
 
-		percent += percentdelta;
+	if( !mainsrc.empty() ) {
 
 		std::string compilestr =
 			"clang++ -g" + flags + "-std=" + standard + " -o build/" + data.name
@@ -67,11 +63,19 @@ int GenerateBuildFiles()
 
 		compilestr += " src/" + mainsrc;
 
-		std::cout << "\n[" << ( int )percent << "%]\t"
+		std::cout << "\n[100%]\t"
 			  << BOLD_YELLOW << "Building and Linking CXX executable: "
-			  << BOLD_GREEN << "build/" << data.name << RESET << "\n";
+			  << BOLD_GREEN << "build/" << data.name << RESET << " ...";
 
-		std::system( compilestr.c_str() );
+		int res = ExecuteCommand( compilestr );
+
+		if( res == 0 )
+			std::cout << " " << GREEN << TICK << RESET << "\n";
+		else
+			std::cout << " " << RED << CROSS << RESET << "\n";
+
+		if( res != 0 )
+			return res;
 	}
 
 	return 0;

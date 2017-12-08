@@ -1,3 +1,6 @@
+#ifndef COLORDEFS_HPP
+#define COLORDEFS_HPP
+
 #include <string>
 
 const std::string RESET = "\033[0m";
@@ -16,3 +19,5 @@ const std::string BOLD_BLUE = "\033[1;34m";
 const std::string BOLD_MAGENTA = "\033[1;35m";
 const std::string BOLD_CYAN = "\033[1;36m";
 const std::string BOLD_WHITE = "\033[1;37m";
+
+#endif // COLORDEFS_HPP
