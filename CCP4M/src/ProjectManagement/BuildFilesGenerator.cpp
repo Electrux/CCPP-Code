@@ -33,7 +33,8 @@ int GenerateBuildFiles()
 
 	float percent = 0.0, percentdelta = 100.0 / filecount;
 
-	std::cout << std::endl;
+	if( !othersrc.empty() )
+		std::cout << std::endl;
 
 	for( auto othersource : othersrc ) {
 
