@@ -15,6 +15,7 @@ int GenerateBuildFiles()
 {
 	std::string mainsrc, flags, libs;
 	std::vector< std::string > othersrc;
+
 	ProjectData data;
 	ConfigMgr config;
 
@@ -156,24 +157,8 @@ int GetBuildData( ConfigMgr & config, ProjectData & data, std::string & mainsrc,
 			return 1;
 	}
 	else {
-		for( auto it = __othersrc.begin(); it != __othersrc.end(); ++it ) {
-
-			if( * ( it->end() - 1 ) == '*' ) {
-
-				// Remove * and /
-				it->erase( it->end() - 1 );
-				it->erase( it->end() - 1 );
-
-				if( *it == "src" ) {
-					if( GetFilesInDir( "src", othersrc ) != 0 )
-						return 1;
-				}
-				else {
-					if( GetFilesInDir( "src/" + *it, othersrc ) != 0 )
-						return 1;
-				}
-			}
-		}
+		if( GetWildCardSources( __othersrc, othersrc ) != 0 )
+			return 1;
 	}
 
 	if( mainsrc.empty() )
@@ -184,6 +169,29 @@ int GetBuildData( ConfigMgr & config, ProjectData & data, std::string & mainsrc,
 		if( *it == mainsrc ) {
 			othersrc.erase( it );
 			break;
+		}
+	}
+
+	return 0;
+}
+
+int GetWildCardSources( std::vector< std::string > & __othersrc,
+			std::vector< std::string > & othersrc )
+{
+	for( auto it = __othersrc.begin(); it != __othersrc.end(); ++it ) {
+
+		if( * ( it->end() - 1 ) == '*' ) {
+
+			// Remove * and /
+			it->erase( it->end() - 1 );
+			it->erase( it->end() - 1 );
+
+			std::string loc;
+
+			loc += ( *it == "src" ) ? "src" : "src/" + *it;
+
+			if( GetFilesInDir( loc, othersrc ) != 0 )
+				return 1;
 		}
 	}
 
