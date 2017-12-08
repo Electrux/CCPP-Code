@@ -36,5 +36,5 @@ int GenerateProjectFiles( ProjectData & data )
 
 	config.SetProject( data );
 
-	return config.CreateDefaultFile( proj_dir );
+	return config.CreateDefaultConfig( proj_dir );
 }

@@ -16,7 +16,11 @@ public:
 	void SetProject( ProjectData & proj );
 	ProjectData GetProject();
 
-	int CreateDefaultFile( std::string project_dir );
+	int CreateDefaultConfig( std::string project_dir );
+
+	int RetrieveConfig( std::string project_dir );
+
+	std::string GetDataString( std::string section, std::string key );
 };
 
 #endif // CONFIGMGR_HPP

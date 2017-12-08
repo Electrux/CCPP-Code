@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "../include/ProjectManagement/ProjectCreator.hpp"
+#include "../include/ProjectManagement/ProjectBuilder.hpp"
 
 #include "../include/ProjectManager.hpp"
 
@@ -19,7 +20,7 @@ int HandleProject( std::vector< std::string > & args )
 		return CreateProject( args );
 	}
 	else if( args[ 2 ] == "build" ) {
-//		return BuildProject( args );
+		return BuildProject( args );
 	}
 	else if( args[ 2 ] == "run" ) {
 //		return RunProject( args );
