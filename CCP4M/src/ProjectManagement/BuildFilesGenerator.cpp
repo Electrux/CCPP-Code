@@ -55,8 +55,8 @@ int GenerateBuildFiles()
 	if( !mainsrc.empty() ) {
 
 		std::string compilestr =
-			"clang++ -g" + flags + "-std=" + standard + " -o build/" + data.name
-			+ libs;
+			"clang++ -g" + flags + "-std=" + standard + " -o build/"
+			+ data.name + libs;
 
 		for( auto othersource : othersrc )		
 			compilestr += " build/buildfiles/" + othersource + ".o ";
