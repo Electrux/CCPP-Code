@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sys/stat.h>
 
 #include "../../include/CommonFuncs.hpp"
 #include "../../include/ColorDefs.hpp"
@@ -86,6 +87,13 @@ int CreateBuildDirectories( std::vector< std::string > & othersrc )
 	std::string buildfilesdir = "build/buildfiles/";
 
 	int retval = 0;
+
+	struct stat info;
+
+	if( stat( buildfilesdir.c_str(), & info ) != 0 ) {
+		std::cout << std::endl;
+		retval |= CreateDir( buildfilesdir );
+	}
 
 	for( auto src : othersrc ) {
 
