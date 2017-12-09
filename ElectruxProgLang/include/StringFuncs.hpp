@@ -4,8 +4,9 @@
 #include <vector>
 
 std::vector< std::string > ToVector( int argc, char ** argv );
-std::vector< std::string > DelimitString( std::string & str, char delim = ' ' );
-std::string GetWord( std::string & str, int loc, char delim = ' ' );
+std::vector< std::string > DelimitString( const std::string & str, char delim = ' ' );
+std::string GetWord( const std::string & str, int loc, char delim = ' ' );
 std::string GetStringBetweenQuotes( const std::string & str );
+int GetIndentLevel( const std::string & str );
 
 #endif // STRINGFUNCS_HPP

@@ -7,5 +7,7 @@ std::unordered_map< int, std::string > COMMANDS_STRING = {
 	{ 0, "print" },
 	{ 1, "scan" },
 	{ 2, "var" },
-	{ 3, "for" },
+	{ 3, "if" },
+	{ 4, "fi" },
+	{ 5, "for" },
 };

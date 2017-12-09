@@ -14,19 +14,33 @@ std::vector< std::string > ToVector( int argc, char ** argv )
 	return temp;
 }
 
-std::vector< std::string > DelimitString( std::string & str, char delim )
+std::vector< std::string > DelimitString( const std::string & str, char delim )
 {
 	std::string temp;
 	std::vector< std::string > tempvec;
 
 	bool encounteredquote = false;
 
-	for( auto ch : str ) {
+	for( auto ch = str.begin(); ch != str.end(); ++ch ) {
 
-		if( ch == '\'' || ch == '\"' )
+		// Tabs and spaces for indentation
+		if( *ch == '\t' )
+			continue;
+
+		if( ( ch + 3 ) < str.end() &&
+		    * ch == ' ' &&
+		    * ( ch + 1 ) == ' ' &&
+		    * ( ch + 2 ) == ' ' &&
+		    * ( ch + 3 ) == ' ' ) {
+
+			ch += 3;
+			continue;
+		}
+
+		if( * ch == '\'' || * ch == '\"' )
 			encounteredquote = !encounteredquote;
 
-		if( ch == delim && !encounteredquote ) {
+		if( * ch == delim && !encounteredquote ) {
 
 			tempvec.push_back( temp );
 			temp.clear();
@@ -34,7 +48,7 @@ std::vector< std::string > DelimitString( std::string & str, char delim )
 			continue;
 		}
 
-		temp += ch;
+		temp += * ch;
 	}
 
 	if( !temp.empty() )
@@ -43,21 +57,35 @@ std::vector< std::string > DelimitString( std::string & str, char delim )
 	return tempvec;
 }
 
-std::string GetWord( std::string & str, int loc, char delim )
+std::string GetWord( const std::string & str, int loc, char delim )
 {
 	std::string temp;
 	int ctr = 0;
 
-	for( auto ch : str ) {
+	for( auto ch = str.begin(); ch != str.end(); ++ch ) {
 
-		if( ch == delim ) {
+		// Tabs and spaces for indentation
+		if( *ch == '\t' )
+			continue;
+
+		if( ( ch + 3 ) < str.end() &&
+		    * ch == ' ' &&
+		    * ( ch + 1 ) == ' ' &&
+		    * ( ch + 2 ) == ' ' &&
+		    * ( ch + 3 ) == ' ' ) {
+
+			ch += 3;
+			continue;
+		}
+
+		if( * ch == delim ) {
 			if( loc == ctr )
 				break;
 			ctr++;
 		}
 
 		if( ctr == loc )
-			temp += ch;
+			temp += * ch;
 	}
 
 	return temp;
@@ -79,4 +107,31 @@ std::string GetStringBetweenQuotes( const std::string & str )
 	}
 
 	return temp;
+}
+
+int GetIndentLevel( const std::string & str )
+{
+	if( str.empty() )
+		return 1;
+
+	int ctr = 0;
+
+	auto it = str.begin();
+
+	while( *it == '\t' ) {
+		ctr++;
+		it++;
+	}
+
+	it = str.begin();
+
+	if( ctr == 0 ) {
+
+		while( *it == ' ' ) {
+			ctr++;
+			it++;
+		}
+	}
+
+	return ctr;
 }

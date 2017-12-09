@@ -17,30 +17,45 @@ int Interpreter::Interpret()
 	if( lines.empty() )
 		return false;
 
+	for( int i = 0; i < ( int )lines.size(); ) {
+
+		if( ExecuteLine( lines, i ) != 0 )
+			return 1;
+	}
+
+	return 0;
+}
+
+int Interpreter::ExecuteLine( const std::vector< std::string > & lines, int & line )
+{
+	std::vector< std::string > lineparts = DelimitString( lines[ line ] );
+
+	if( lineparts.empty() || lineparts[ 0 ][ 0 ] == '#' ) {
+		line++;
+		return 0;
+	}
+
 	int retval = 0;
 
-	for( int i = 0; i < ( int )lines.size(); ++i ) {
+	if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::PRINT ]  ) {
 
-		std::vector< std::string > lineparts = DelimitString( lines[ i ] );
+		retval |= InterpretPrint( lineparts, line + 1 );
+		line++;
+	}
+	else if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::SCAN ] ) {
 
-		if( lineparts.empty() || lineparts[ 0 ][ 0 ] == '#' )
-			continue;
+		retval |= InterpretScan( lineparts, line + 1 );
+		line++;
+	}
+	else if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::VAR ] ) {
 
-		if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::PRINT ]  ) {
+		retval |= InterpretNewVar( lineparts, line + 1 );
+		line++;
+	}
+	else if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::IF ] ) {
 
-			retval |= InterpretPrint( lineparts, i + 1 );
-		}
-		else if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::VAR ] ) {
-
-			retval |= InterpretNewVar( lineparts, i + 1 );
-		}
-		else if( lineparts[ 0 ] == COMMANDS_STRING[ COMMANDS::SCAN ] ) {
-
-			retval |= InterpretScan( lineparts, i + 1 );
-		}
-
-		if( retval != 0 )
-			return retval;
+		// Modifies the line value to skip till end condition.
+		retval |= InterpretConditional( lines, lineparts, line );
 	}
 
 	return retval;
@@ -70,22 +85,16 @@ int Interpreter::InterpretNewVar( std::vector< std::string > & lineparts, int li
 
 	if( lineparts.size() < 4 || lineparts[ 2 ] != "=" ) {
 		std::cerr << "Error on line: " << line
-			  << "\n\tNeed to use format:\n\t\tvar <varname> = <val>!" << std::endl;
+			  << "\n\tNeed to use format:"
+			  << "\n\t\tvar <varname> = <val>" << std::endl;
 		return 1;
 	}
 
-	if( IsInt( lineparts[ 1 ] ) != INT_MIN ) {
+	DataTypes type = GetType( lineparts[ 1 ] );
+	if( type == INT || type == FLT ) {
 		std::cerr << "Error on line: " << line
 			  << "\n\tAttempted to create a variable with integer name!"
 			  << std::endl;
-		return 1;
-	}
-
-	if( intvars.find( lineparts[ 1 ] ) != intvars.end() ||
-	    strvars.find( lineparts[ 1 ] ) != strvars.end() ) {
-		std::cerr << "Error on line: " << line
-			  << "\n\tRedeclaration of a previously created variable: "
-			  << lineparts[ 1 ] << std::endl;
 		return 1;
 	}
 
@@ -116,3 +125,62 @@ int Interpreter::InterpretScan( std::vector< std::string > & lineparts, int line
 	return 0;
 }
 
+int Interpreter::InterpretConditional( const std::vector< std::string > & lines,
+				       const std::vector< std::string > & lineparts,
+				       int & line )
+{
+	// Format is:
+	// if x CONDITION y :
+	//     TODO
+	// fi
+
+	if( lineparts.size() < 5 ) {
+		std::cerr << "Error on line: " << line + 1
+			  << "\n\tFormat for if is:"
+			  << "\n\t\tif a CONDITION b :" << std::endl;
+		return 1;
+	}
+
+	int indentlevel = GetIndentLevel( lines[ line ] );
+
+	int endline = -1;
+	for( int i = line + 1; i < ( int )lines.size(); ++i ) {
+
+		if( GetWord( lines[ i ], 0 ) == COMMANDS_STRING[ COMMANDS::ENDIF ] &&
+		    indentlevel == GetIndentLevel( lines[ i ] ) ) {
+
+			endline = i;
+		}
+	}
+
+	if( endline == -1 ) {
+		std::cerr << "Error on line: " << line + 1
+			  << "\n\tConditional is started here but it never ends!"
+			  << " Note that in conditionals and loops, indentation matters!"
+			  << std::endl;
+		return 1;
+	}
+
+	int res = EvalCondition( lineparts, line );
+	if( res == -1 )
+		return 1;
+
+	int retval = 0;
+
+	if( res ) {
+
+		for( line += 1; line < endline; ) {
+			retval |= ExecuteLine( lines, line );
+
+			if( retval != 0 )
+				return 1;
+		}
+	}
+	else {
+		line = endline;
+	}
+
+	line++;
+
+	return retval;
+}

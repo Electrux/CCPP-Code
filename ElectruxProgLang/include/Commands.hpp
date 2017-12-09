@@ -11,6 +11,8 @@ enum COMMANDS
 	PRINT,
 	SCAN,
 	VAR,
+	IF,
+	ENDIF,
 	FOR,
 };
 

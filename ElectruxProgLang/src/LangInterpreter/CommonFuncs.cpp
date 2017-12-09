@@ -6,6 +6,7 @@
 #include "../../include/Commands.hpp"
 #include "../../include/FileParser.hpp"
 #include "../../include/StringFuncs.hpp"
+#include "../../include/DataTypes.hpp"
 
 #include "../../include/LangInterpreter/LanguageInterpreter.hpp"
 
@@ -14,18 +15,23 @@ int Interpreter::AddVariable( const std::string & var,
 			      int line, bool isvarcheck )
 {
 	if( intvars.find( var ) != intvars.end() ||
-	    strvars.find( var ) != strvars.end() ) {
+	    strvars.find( var ) != strvars.end() ||
+	    fltvars.find( var ) != fltvars.end() ) {
 		std::cerr << "Error on line: " << line
 			  << "\n\tRedeclaration of a previously created variable: "
 			  << var << std::endl;
 		return 1;
 	}
 
-	int intval = IsInt( val );
+	DataTypes dt = GetType( val );
 
-	if( intval != INT_MIN ) {
+	if( dt == INT ) {
 
-		intvars[ var ] = intval;
+		intvars[ var ] = std::stoi( val );
+	}
+	else if( dt == FLT ) {
+
+		fltvars[ var ] = std::stof( val );
 	}
 	else {
 		if( !IsConstString( val ) ) {
@@ -68,18 +74,13 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 				fmtstr += "{NONE}";
 			}
 			else {
-				if( IsConstString( lineparts[ argctr ] ) ||
-				    IsInt( lineparts[ argctr ] ) != INT_MIN ) {
+				std::string val =
+					GetReplacementValue( lineparts[ argctr ], line );
 
-					fmtstr += GetStringBetweenQuotes( lineparts[ argctr ] );
-				}
-				else {
-					std::string val;
-					if( !GetVarVal( lineparts[ argctr ], val, line ) )
-						return 1;
+				if( val == "" )
+					return 1;
 
-					fmtstr += val;
-				}
+				fmtstr += val;
 			}
 
 			ch++;
@@ -92,6 +93,24 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 	}
 
 	return 0;
+}
+
+std::string Interpreter::GetReplacementValue( std::string & str, int line )
+{
+	if( IsConstString( str ) )
+		return GetStringBetweenQuotes( str );
+
+	DataTypes type = GetType( str );
+
+	if( type == INT || type == FLT ) {
+		return str;
+	}
+
+	std::string val;
+	if( !GetVarVal( str, val, line ) )
+		return "";
+
+	return val;
 }
 
 bool Interpreter::IsConstString( const std::string & data)
@@ -111,18 +130,24 @@ bool Interpreter::IsConstString( const std::string & data)
 	return false;
 }
 
-int Interpreter::IsInt( const std::string & data )
+DataTypes Interpreter::GetType( const std::string & data )
 {
-	int temp = 0;
+	int decimalcount = 0;
 
 	for( auto ch : data ) {
-		if( ch < '0' || ch > '9' )
-			return INT_MIN;
-
-		temp = ( temp * 10 ) + ( ch - '0' );
+		if( ( ch < '0' || ch > '9' ) && ch != '.' ) {
+			return DataTypes::STR;
+		}
+		if( ch == '.' )
+			decimalcount++;
 	}
 
-	return temp;
+	if( decimalcount == 0 )
+		return DataTypes::INT;
+	else if( decimalcount == 1 )
+		return DataTypes::FLT;
+
+	return DataTypes::STR;
 }
 
 bool Interpreter::GetVarVal( const std::string & key, std::string & val, const int line )
@@ -130,6 +155,13 @@ bool Interpreter::GetVarVal( const std::string & key, std::string & val, const i
 	if( intvars.find( key ) != intvars.end() ) {
 
 		val = std::to_string( intvars[ key ] );
+
+		return true;
+	}
+
+	if( fltvars.find( key ) != fltvars.end() ) {
+
+		val = std::to_string( fltvars[ key ] );
 
 		return true;
 	}

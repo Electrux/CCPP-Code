@@ -4,10 +4,12 @@
 #include <vector>
 #include <unordered_map>
 
+#include "../DataTypes.hpp"
 #include "../FileParser.hpp"
 
 class Interpreter
 {
+
 public:
 	Interpreter( FileParser & parser );
 
@@ -20,13 +22,24 @@ private:
 
 	std::unordered_map< std::string, std::string > strvars;
 	std::unordered_map< std::string, int > intvars;
+	std::unordered_map< std::string, float > fltvars;
 
 	// FUNCTIONS
+
+	int ExecuteLine( const std::vector< std::string > & lines, int & line );
+
 	int InterpretPrint( std::vector< std::string > & lineparts, int line );
 
 	int InterpretNewVar( std::vector< std::string > & lineparts, int line );
 
 	int InterpretScan( std::vector< std::string > & lineparts, int line );
+
+	int InterpretConditional( const std::vector< std::string > & lines,
+				  const std::vector< std::string > & lineparts,
+				  int & line );
+
+	// Eval Condition function
+	int EvalCondition( std::vector< std::string > lineparts, int line );
 
 	// Common Functions
 
@@ -38,7 +51,9 @@ private:
 			  std::string & fmtstr,
 			  int line );
 
-	int IsInt( const std::string & data );
+	std::string GetReplacementValue( std::string & str, int line );
+
+	DataTypes GetType( const std::string & data );
 
 	bool IsConstString( const std::string & data);
 
