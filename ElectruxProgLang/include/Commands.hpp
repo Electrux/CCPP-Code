@@ -8,12 +8,21 @@ extern std::unordered_map< int, std::string > COMMANDS_STRING;
 
 enum COMMANDS
 {
+	OK,
+	ERR,
+
 	PRINT,
 	SCAN,
 	VAR,
 	IF,
+	ELSE,
+	ELSEIF,
 	ENDIF,
 	FOR,
+	ENDFOR,
+
+	BREAK,
+	CONTINUE,
 };
 
 #endif // COMMANDS_HPP

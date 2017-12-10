@@ -4,10 +4,19 @@
 #include "../include/Commands.hpp"
 
 std::unordered_map< int, std::string > COMMANDS_STRING = {
-	{ 0, "print" },
-	{ 1, "scan" },
-	{ 2, "var" },
-	{ 3, "if" },
-	{ 4, "fi" },
-	{ 5, "for" },
+	{ 0, "ok" },
+	{ 1, "err" },
+
+	{ 2, "print" },
+	{ 3, "scan" },
+	{ 4, "var" },
+	{ 5, "if" },
+	{ 6, "else" },
+	{ 7, "elseif" },
+	{ 8, "fi" },
+	{ 9, "for" },
+	{ 10, "rof" },
+
+	{ 11, "break" },
+	{ 12, "continue" },
 };

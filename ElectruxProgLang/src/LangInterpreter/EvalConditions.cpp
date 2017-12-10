@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 
+#include "../../include/Commands.hpp"
 #include "../../include/DataTypes.hpp"
 
 #include "../../include/LangInterpreter/LanguageInterpreter.hpp"
@@ -35,19 +36,19 @@ int Interpreter::EvalCondition( std::vector< std::string > lineparts, int line )
 		val2 = std::stof( replval2 );
 
 		if( cond == "<" )
-			return val1 < val2;
+			return val1 < val2 ? OK : ERR;
 		else if( cond == "<=" )
-			return val1 <= val2;
+			return val1 <= val2 ? OK : ERR;
 
 		else if( cond == ">" )
-			return val1 > val2;
+			return val1 > val2 ? OK : ERR;
 		else if( cond == ">=" )
-			return val1 >= val2;
+			return val1 >= val2 ? OK : ERR;
 
 		else if( cond == "!=" )
-			return val1 != val2;
+			return val1 != val2 ? OK : ERR;
 		else if( cond == "==" )
-			return val1 == val2;
+			return val1 == val2 ? OK : ERR;
 	}
 
 	if( dt1 == INT ) {
@@ -58,19 +59,19 @@ int Interpreter::EvalCondition( std::vector< std::string > lineparts, int line )
 		val2 = std::stoi( replval2 );
 
 		if( cond == "<" )
-			return val1 < val2;
+			return val1 < val2 ? OK : ERR;
 		else if( cond == "<=" )
-			return val1 <= val2;
+			return val1 <= val2 ? OK : ERR;
 
 		else if( cond == ">" )
-			return val1 > val2;
+			return val1 > val2 ? OK : ERR;
 		else if( cond == ">=" )
-			return val1 >= val2;
+			return val1 >= val2 ? OK : ERR;
 
 		else if( cond == "!=" )
-			return val1 != val2;
+			return val1 != val2 ? OK : ERR;
 		else if( cond == "==" )
-			return val1 == val2;
+			return val1 == val2 ? OK : ERR;
 	}
 
 	if( dt1 == STR ) {
@@ -79,19 +80,19 @@ int Interpreter::EvalCondition( std::vector< std::string > lineparts, int line )
 		std::string & val2 = replval2;
 
 		if( cond == "<" )
-			return val1 < val2;
+			return val1 < val2 ? OK : ERR;
 		else if( cond == "<=" )
-			return val1 <= val2;
+			return val1 <= val2 ? OK : ERR;
 
 		else if( cond == ">" )
-			return val1 > val2;
+			return val1 > val2 ? OK : ERR;
 		else if( cond == ">=" )
-			return val1 >= val2;
+			return val1 >= val2 ? OK : ERR;
 
 		else if( cond == "!=" )
-			return val1 != val2;
+			return val1 != val2 ? OK : ERR;
 		else if( cond == "==" )
-			return val1 == val2;
+			return val1 == val2 ? OK : ERR;
 	}
 
 	return -1;

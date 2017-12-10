@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 
+#include "../Commands.hpp"
 #include "../DataTypes.hpp"
 #include "../FileParser.hpp"
 
@@ -38,10 +39,22 @@ private:
 				  const std::vector< std::string > & lineparts,
 				  int & line );
 
+	int InterpretLoop( const std::vector< std::string > & lines,
+			   const std::vector< std::string > & lineparts,
+			   int & line );
+
 	// Eval Condition function
 	int EvalCondition( std::vector< std::string > lineparts, int line );
 
 	// Common Functions
+
+	COMMANDS GetReturnCode( int val );
+
+	int DeleteVariable( const std::string & var, int line );
+
+	int UpdateVariable( const std::string & var,
+			    const std::string & val,
+			    int line, bool isvarcheck = true );
 
 	int AddVariable( const std::string & var,
 			 const std::string & val,
@@ -51,7 +64,7 @@ private:
 			  std::string & fmtstr,
 			  int line );
 
-	std::string GetReplacementValue( std::string & str, int line );
+	std::string GetReplacementValue( const std::string & str, int line );
 
 	DataTypes GetType( const std::string & data );
 

@@ -10,6 +10,84 @@
 
 #include "../../include/LangInterpreter/LanguageInterpreter.hpp"
 
+COMMANDS Interpreter::GetReturnCode( int val )
+{
+	if( val == 0 )
+		return OK;
+
+	
+
+	return ERR;
+}
+
+int Interpreter::DeleteVariable( const std::string & var, int line )
+{
+	if( intvars.find( var ) != intvars.end() ) {
+
+		intvars.erase( var );
+		return 0;
+	}
+
+	if( strvars.find( var ) != strvars.end() ) {
+
+		strvars.erase( var );
+		return 0;
+	}
+
+	if( fltvars.find( var ) != fltvars.end() ) {
+
+		fltvars.erase( var );
+		return 0;
+	}
+
+	std::cerr << "Error on line: " << line
+		  << "\n\tAttempted to delete a nonexistent variable: "
+		  << var << std::endl;
+	return 1;
+}
+
+int Interpreter::UpdateVariable( const std::string & var,
+			      const std::string & val,
+			      int line, bool isvarcheck )
+{
+	if( intvars.find( var ) == intvars.end() &&
+	    strvars.find( var ) == strvars.end() &&
+	    fltvars.find( var ) == fltvars.end() ) {
+		std::cerr << "Error on line: " << line
+			  << "\n\tAttempted to update a nonexistent variable: "
+			  << var << std::endl;
+		return 1;
+	}
+
+	DataTypes dt = GetType( val );
+
+	if( dt == INT ) {
+
+		intvars[ var ] = std::stoi( val );
+	}
+	else if( dt == FLT ) {
+
+		fltvars[ var ] = std::stof( val );
+	}
+	else {
+		if( !IsConstString( val ) ) {
+
+			std::string tempval = val;
+
+			if( isvarcheck && !GetVarVal( val, tempval, line ) )
+				return 1;
+
+			strvars[ var ] = tempval;
+		}
+		else {
+			strvars[ var ] = GetStringBetweenQuotes( val );
+		}
+	}
+
+	return 0;
+}
+
+
 int Interpreter::AddVariable( const std::string & var,
 			      const std::string & val,
 			      int line, bool isvarcheck )
@@ -95,7 +173,7 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 	return 0;
 }
 
-std::string Interpreter::GetReplacementValue( std::string & str, int line )
+std::string Interpreter::GetReplacementValue( const std::string & str, int line )
 {
 	if( IsConstString( str ) )
 		return GetStringBetweenQuotes( str );
