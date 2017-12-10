@@ -43,12 +43,19 @@ private:
 			   const std::vector< std::string > & lineparts,
 			   int & line );
 
+	int InterpretStatement( const std::vector< std::string > & lineparts, int line );
+
 	// Eval Condition function
-	int EvalCondition( std::vector< std::string > lineparts, int line );
+	int EvalCondition( std::vector< std::string > & lineparts, int line );
+
+	// Eval Expression function
+	int EvalExpression( std::vector< std::string > & lineparts,
+			    int from, int line, int & result );
+
+	int EvalExpression( std::vector< std::string > & lineparts,
+			    int from, int line, float & result );
 
 	// Common Functions
-
-	COMMANDS GetReturnCode( int val );
 
 	int DeleteVariable( const std::string & var, int line );
 

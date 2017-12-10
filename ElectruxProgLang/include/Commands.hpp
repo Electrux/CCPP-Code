@@ -23,6 +23,8 @@ enum COMMANDS
 
 	BREAK,
 	CONTINUE,
+
+	STATEMENT,
 };
 
 #endif // COMMANDS_HPP

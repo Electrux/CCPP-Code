@@ -7,7 +7,7 @@
 
 #include "../../include/LangInterpreter/LanguageInterpreter.hpp"
 
-int Interpreter::EvalCondition( std::vector< std::string > lineparts, int line )
+int Interpreter::EvalCondition( std::vector< std::string > & lineparts, int line )
 {
 	// if a CONDITION b :
 	std::string replval1 = GetReplacementValue( lineparts[ 1 ], line + 1 );

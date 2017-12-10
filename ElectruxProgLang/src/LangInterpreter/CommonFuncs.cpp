@@ -10,40 +10,30 @@
 
 #include "../../include/LangInterpreter/LanguageInterpreter.hpp"
 
-COMMANDS Interpreter::GetReturnCode( int val )
-{
-	if( val == 0 )
-		return OK;
-
-	
-
-	return ERR;
-}
-
 int Interpreter::DeleteVariable( const std::string & var, int line )
 {
 	if( intvars.find( var ) != intvars.end() ) {
 
 		intvars.erase( var );
-		return 0;
+		return OK;
 	}
 
 	if( strvars.find( var ) != strvars.end() ) {
 
 		strvars.erase( var );
-		return 0;
+		return OK;
 	}
 
 	if( fltvars.find( var ) != fltvars.end() ) {
 
 		fltvars.erase( var );
-		return 0;
+		return OK;
 	}
 
 	std::cerr << "Error on line: " << line
 		  << "\n\tAttempted to delete a nonexistent variable: "
 		  << var << std::endl;
-	return 1;
+	return ERR;
 }
 
 int Interpreter::UpdateVariable( const std::string & var,
@@ -56,7 +46,7 @@ int Interpreter::UpdateVariable( const std::string & var,
 		std::cerr << "Error on line: " << line
 			  << "\n\tAttempted to update a nonexistent variable: "
 			  << var << std::endl;
-		return 1;
+		return ERR;
 	}
 
 	DataTypes dt = GetType( val );
@@ -84,7 +74,7 @@ int Interpreter::UpdateVariable( const std::string & var,
 		}
 	}
 
-	return 0;
+	return OK;
 }
 
 
@@ -98,7 +88,7 @@ int Interpreter::AddVariable( const std::string & var,
 		std::cerr << "Error on line: " << line
 			  << "\n\tRedeclaration of a previously created variable: "
 			  << var << std::endl;
-		return 1;
+		return ERR;
 	}
 
 	DataTypes dt = GetType( val );
@@ -126,7 +116,7 @@ int Interpreter::AddVariable( const std::string & var,
 		}
 	}
 
-	return 0;
+	return OK;
 }
 
 int Interpreter::FormatString( std::vector< std::string > & lineparts,
@@ -139,7 +129,7 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 	if( !IsConstString( lineparts[ 1 ] ) ) {
 		std::cerr << "Error on line: " << line
 			  << "\n\tInvalid string for print!" << std::endl;
-		return 1;
+		return ERR;
 	}
 
 	// +1 and -1 to counter the quotes.
@@ -156,12 +146,12 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 					GetReplacementValue( lineparts[ argctr ], line );
 
 				if( val == "" )
-					return 1;
+					return ERR;
 
 				fmtstr += val;
 			}
 
-			ch++;
+			ch++;nnnn
 
 			argctr++;
 		}
@@ -170,7 +160,7 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 		}
 	}
 
-	return 0;
+	return OK;
 }
 
 std::string Interpreter::GetReplacementValue( const std::string & str, int line )

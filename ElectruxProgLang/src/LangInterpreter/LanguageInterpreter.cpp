@@ -395,3 +395,26 @@ int Interpreter::InterpretLoop( const std::vector< std::string > & lines,
 
 	return OK;
 }
+
+int Interpreter::InterpretStatement( const std::vector< std::string > & lineparts, int line )
+{
+	if( lineparts.size() < 3 ) {
+		std::cerr << "Error on line: " << line
+			  << "\n\tInvalid Statement. The format for a statement is: "
+			  << "\n\t\tvar <OPERATION> expression"
+			  << std::endl;
+		return ERR;
+	}
+
+	auto type = GetType( lineparts[ 0 ] );
+
+	if( type == FLT || type == INT ) {
+
+		std::cerr << "Error on line: " << line
+			  << "\n\tAttempted to use a non string value as a variable"
+			  << std::endl;
+		return ERR;
+	}
+
+	
+}
