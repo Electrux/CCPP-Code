@@ -46,7 +46,7 @@ private:
 	int InterpretStatement( const std::vector< std::string > & lineparts, int line );
 
 	// Eval Condition function
-	int EvalCondition( std::vector< std::string > & lineparts, int line );
+	int EvalCondition( const std::vector< std::string > & lineparts, int line );
 
 	// Eval Expression function
 	int EvalExpression( std::vector< std::string > & lineparts,

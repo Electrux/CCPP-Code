@@ -416,5 +416,5 @@ int Interpreter::InterpretStatement( const std::vector< std::string > & linepart
 		return ERR;
 	}
 
-	
+	return OK;
 }

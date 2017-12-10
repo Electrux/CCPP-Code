@@ -152,6 +152,8 @@ int Interpreter::EvalExpression( std::vector< std::string > & lineparts,
 				result -= std::stof( val );
 		}
 	}
+
+	return OK;
 }
 
 std::vector< std::string > GenPostfix( const std::vector< std::string > & _infix, int line )

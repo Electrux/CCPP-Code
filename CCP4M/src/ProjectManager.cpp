@@ -3,6 +3,7 @@
 
 #include "../include/ProjectManagement/ProjectCreator.hpp"
 #include "../include/ProjectManagement/ProjectBuilder.hpp"
+#include "../include/ProjectManagement/ProjectExecuter.hpp"
 
 #include "../include/ProjectManager.hpp"
 
@@ -23,7 +24,7 @@ int HandleProject( std::vector< std::string > & args )
 		return BuildProject( args );
 	}
 	else if( args[ 2 ] == "run" ) {
-//		return RunProject( args );
+		return ExecuteProject( args );
 	}
 	else {
 		std::cout << "Invalid parameter. Possible Options are: help, new, run, build\n";

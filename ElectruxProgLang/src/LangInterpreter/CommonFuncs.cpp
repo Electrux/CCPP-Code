@@ -151,7 +151,7 @@ int Interpreter::FormatString( std::vector< std::string > & lineparts,
 				fmtstr += val;
 			}
 
-			ch++;nnnn
+			ch++;
 
 			argctr++;
 		}
