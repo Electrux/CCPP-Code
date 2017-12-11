@@ -1,0 +1,38 @@
+Types of entities:
+
+      1. Literals => 9, 26.3, "Hi" ...
+      2. Keywords =>
+
+      	 	  var
+
+		  if
+		  elseif
+		  else
+		  fi
+
+		  for .. in
+		  break
+		  continue
+		  rof
+
+		  ret
+
+      3. Operators =>
+      	 	  Assignment   -> =
+		  Greaterthan  -> >
+		  Lessthan     -> <
+		  Equals       -> ==
+		  Greaterequal -> >=
+		  Lessequal    -> <=
+
+		  Negate       -> !
+
+      4. Separators =>
+      	 	  Space           -> " "
+		  Newline   	  -> "\n"
+		  Entity in 	  -> .
+		  Cond stmt begin -> :
+		  Bracket   	  -> (), {}, []
+
+      5. Identifiers =>
+      	 	  All combinations of alphabets except keywords.
