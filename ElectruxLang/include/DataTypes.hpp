@@ -10,10 +10,10 @@ namespace DataType
 	{
 		NUM,
 		FLOAT,
-		STRING,
+		STRING,    // COMPLEX
 
-		OPERATOR,
-		LOGICAL,
+		OPERATOR,  // COMPLEX
+		LOGICAL,   // COMPLEX
 		SEPARATOR,
 
 		LITERAL,
@@ -74,6 +74,7 @@ namespace DataType
 	{
 		SPACE,
 		NEWLINE,
+		TAB,
 		DOT,
 		BLOCKBEGIN,
 		PARENTHESISOPEN,
@@ -87,6 +88,7 @@ namespace DataType
 	struct Data
 	{
 		SymbolType type;
+		int detailtype;
 		std::string word;
 	};
 

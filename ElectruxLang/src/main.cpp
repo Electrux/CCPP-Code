@@ -18,16 +18,10 @@ int main( int argc, char ** argv )
 	std::vector< std::vector< DataType::Data > > data;
 
 	while( std::getline( file, line ) ) {
-		auto lineparts = DelimitString( line );
 
-		int indent = GetIndentLevel( line );
-
-		if( lineparts.empty() ||
-		    lineparts[ 0 ] == DataType::KEYWORDS_STR[ DataType::LINECOMMENT ] )
-			continue;
-
-		std::cout << indent << " -> ";
-		data.push_back( Lexer::ParseLexicoSymbols( lineparts ) );
+		auto dataline = Lexer::ParseLexicoSymbols( line );
+		if( !dataline.empty() )
+		data.push_back( dataline );
 	}
 
 	return 0;
