@@ -21,6 +21,8 @@ public:
 	int RetrieveConfig( std::string project_dir );
 
 	std::string GetDataString( std::string section, std::string key );
+
+	std::string GetLibraryFlags( std::string lib );
 };
 
 #endif // CONFIGMGR_HPP

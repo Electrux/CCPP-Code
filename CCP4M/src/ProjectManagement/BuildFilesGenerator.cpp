@@ -170,7 +170,12 @@ int GetBuildData( ConfigMgr & config, ProjectData & data, std::string & mainsrc,
 
 	libs = " ";
 	for( auto lb : libvec ) {
-		libs += lb;
+
+		auto libflagvecstr = config.GetDataString( "Deps", lb );
+
+		std::replace( libflagvecstr.begin(), libflagvecstr.end(), ',', ' ' );
+
+		libs += libflagvecstr;
 		libs += " ";
 	}
 
