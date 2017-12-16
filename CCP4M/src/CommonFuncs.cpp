@@ -34,3 +34,43 @@ std::vector< std::string > DelimStringToVector( std::string str, char delim )
 
 	return val;
 }
+
+
+std::string GetStringBetweenQuotes( std::string & str )
+{
+	bool inquote = false;
+
+	std::string ret;
+
+	for( auto ch : str ) {
+
+		if( ch == '\'' || ch == '\"' )
+			inquote = !inquote;
+
+		else if( inquote )
+			ret += ch;
+	}
+
+	return ret;
+}
+
+std::string GetStringTillLastSlash( std::string & str )
+{
+	std::string temp;
+
+	bool gotslash = false;
+
+	for( auto ch = str.rbegin(); ch != str.rend(); ++ch ) {
+
+		if( * ch == '/' )
+			gotslash = true;
+
+		if( gotslash )
+			temp += * ch;
+	}
+
+	if( !temp.empty() )
+		std::reverse( temp.begin(), temp.end() );
+
+	return temp;
+}

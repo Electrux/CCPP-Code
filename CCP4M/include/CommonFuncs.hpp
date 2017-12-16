@@ -7,4 +7,8 @@ std::vector< std::string > ToVector( int argc, char ** argv );
 
 std::vector< std::string > DelimStringToVector( std::string str, char delim = ',' );
 
+std::string GetStringBetweenQuotes( std::string & str );
+
+std::string GetStringTillLastSlash( std::string & str );
+
 #endif //COMMONFUNCS_HPP

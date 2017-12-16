@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+#include "../../include/CommonFuncs.hpp"
+
 #include "../../include/ProjectManagement/FSFuncs.hpp"
 
 void SetFolderPaths( std::string &directory,
@@ -83,6 +85,65 @@ void CreateFileWithContents( const std::string &filename,
 		file << contents;
 
 	file.close();
+}
+
+bool IsLatestBuild( std::string filename )
+{
+	std::vector< std::string > includes;
+
+	std::fstream file;
+
+	std::string srcfullpath = "src/" + GetStringTillLastSlash( filename );
+
+	file.open( "src/" + filename, std::ios::in );
+
+	if( !file )
+		return false;
+
+	std::string line;
+
+	while( std::getline( file, line ) ) {
+
+		if( line.find( "#include \"" ) != std::string::npos ) {
+
+			//std::cout << "includes: " << line << "\n";
+
+			includes.push_back( GetStringBetweenQuotes( line ) );
+		}
+	}
+
+	file.close();
+
+	long long buildfilemodtime = GetLastModifiedTime(
+		"build/buildfiles/" + filename + ".o" );
+
+	if( buildfilemodtime < 0 )
+		return false;
+
+	for( auto inc : includes ) {
+
+		long long modtime = GetLastModifiedTime( srcfullpath + inc );
+
+		if( modtime < 0 || modtime > buildfilemodtime )
+			return false;
+	}
+
+	long long srcfilemodtime = GetLastModifiedTime( "src/" + filename );
+
+	if( srcfilemodtime < 0 || srcfilemodtime > buildfilemodtime )
+		return false;
+
+	return true;
+}
+
+long long GetLastModifiedTime( std::string file )
+{
+	struct stat info;
+
+	if( stat( file.c_str(), & info ) != 0 )
+		return -1;
+
+	return info.st_mtime;
 }
 
 int GetFilesInDir( std::string dir, std::vector< std::string > & temp, bool recursive )

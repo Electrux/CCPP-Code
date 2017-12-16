@@ -34,7 +34,7 @@ int GenerateBuildFiles()
 
 	std::string standard = config.GetDataString( "Core", "Std" );
 
-	int filecount = othersrc.size() + ( ( mainsrc.empty() ) ? 0 : 1 );
+	int filecount = othersrc.size() + ( int )!mainsrc.empty();
 
 	if( !othersrc.empty() )
 		std::cout << std::endl;
@@ -47,7 +47,12 @@ int GenerateBuildFiles()
 			+ " -o build/buildfiles/" + othersource
 			+ ".o src/" + othersource + libs;
 
-		commands.push_back( { othersource, compilestr } );
+		bool res = IsLatestBuild( othersource );
+
+		if( res )
+			filecount--;
+		else
+			commands.push_back( { othersource, compilestr } );
 	}
 
 	if( ExecuteAllCommands( commands, filecount ) != 0 )
@@ -55,28 +60,36 @@ int GenerateBuildFiles()
 
 	if( !mainsrc.empty() ) {
 
-		std::string compilestr =
-			"clang++ -g" + flags + "-std=" + standard + " -o build/"
-			+ data.name + libs;
+		auto mainmodtime = GetLastModifiedTime( "src/" + mainsrc );
+		auto buildfilemodtime = GetLastModifiedTime( "build/" + data.name );
 
-		for( auto othersource : othersrc )		
-			compilestr += " build/buildfiles/" + othersource + ".o ";
+		if( buildfilemodtime >= 0 && mainmodtime <= buildfilemodtime && filecount == 1) {
+			std::cout << BOLD_GREEN << "Project up to date!" << RESET << std::endl;
+		}
+		else {
+			std::string compilestr =
+				"clang++ -g" + flags + "-std=" + standard + " -o build/"
+				+ data.name + libs;
 
-		compilestr += " src/" + mainsrc;
+			for( auto othersource : othersrc )		
+				compilestr += " build/buildfiles/" + othersource + ".o ";
 
-		std::cout << "\n[100%]\t"
-			  << BOLD_YELLOW << "Building and Linking CXX executable: "
-			  << BOLD_GREEN << "build/" << data.name << RESET << " ...";
+			compilestr += " src/" + mainsrc;
 
-		int res = ExecuteCommand( compilestr );
+			std::cout << "\n[100%]\t"
+				  << BOLD_YELLOW << "Building and Linking CXX executable: "
+				  << BOLD_GREEN << "build/" << data.name << RESET << " ...";
 
-		if( res == 0 )
-			std::cout << " " << GREEN << TICK << RESET << "\n";
-		else
-			std::cout << " " << RED << CROSS << RESET << "\n";
+			int res = ExecuteCommand( compilestr );
 
-		if( res != 0 )
-			return res;
+			if( res == 0 )
+				std::cout << " " << GREEN << TICK << RESET << std::endl;
+			else
+				std::cout << " " << RED << CROSS << RESET << std::endl;;
+
+			if( res != 0 )
+				return res;
+		}
 	}
 
 	return 0;
