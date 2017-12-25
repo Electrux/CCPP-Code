@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 std::vector< std::string > ToVector( int argc, char ** argv )
 {

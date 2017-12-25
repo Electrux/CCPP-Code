@@ -2,10 +2,12 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstring>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
 
+#include "../../include/ColorDefs.hpp"
 #include "../../include/CommonFuncs.hpp"
 
 #include "../../include/ProjectManagement/FSFuncs.hpp"
@@ -54,7 +56,7 @@ int CreateDir( const std::string &dir )
 	if( !temp.empty() )
 		dirs.push_back( temp );
 
-	std::cout << "Creating Directory: " << dir << "\n";
+	std::cout << BLUE << "Creating Directory: " << MAGENTA << dir << RESET << "\n";
 
 	int retval = 0;
 	std::string finaldir;

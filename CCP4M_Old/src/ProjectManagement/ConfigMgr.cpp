@@ -19,7 +19,7 @@ int ConfigMgr::CreateDefaultConfig( std::string project_dir )
 
 	for( auto lib : data.deps ) {
 		concatlibs += lib;
-		concatlibs += ',';
+		concatlibs += ", ";
 	}
 
 	if( !concatlibs.empty() )
@@ -36,7 +36,7 @@ int ConfigMgr::CreateDefaultConfig( std::string project_dir )
 
 	parser.CreateSection( "Deps" );
 	for( auto lib : data.deps ) {
-		parser.SetDataString( "Deps", lib, "Default" );
+		parser.SetDataString( "Deps", lib, GetLibraryFlags( lib ) );
 	}
 
 	std::cout << "Creating file: " << project_dir + "/ccp4m.ini\n";
@@ -62,4 +62,17 @@ std::string ConfigMgr::GetDataString( std::string section, std::string key )
 	parser.GetDataString( section, key, temp );
 
 	return temp;
+}
+
+std::string ConfigMgr::GetLibraryFlags( std::string lib )
+{
+	if( lib == "sfml" ) {
+		return "-lsfml-graphics, -lsfml-window, -lsfml-system";
+	}
+
+	if( lib == "pthread" ) {
+		return "-lpthread";
+	}
+
+	return "";
 }

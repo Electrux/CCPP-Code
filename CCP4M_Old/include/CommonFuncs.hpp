@@ -1,6 +1,7 @@
 #ifndef COMMONFUNCS_HPP
 #define COMMONFUNCS_HPP
 
+#include <string>
 #include <vector>
 
 std::vector< std::string > ToVector( int argc, char ** argv );

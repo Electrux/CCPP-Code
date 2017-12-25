@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <sys/stat.h>
 
 #include "../../include/CommonFuncs.hpp"
@@ -45,7 +46,7 @@ int GenerateBuildFiles()
 		std::string compilestr =
 			"clang++ -c" + flags + "-std=" + standard
 			+ " -o build/buildfiles/" + othersource
-			+ ".o src/" + othersource + libs;
+			+ ".o src/" + othersource;
 
 		bool res = IsLatestBuild( othersource );
 
@@ -170,7 +171,12 @@ int GetBuildData( ConfigMgr & config, ProjectData & data, std::string & mainsrc,
 
 	libs = " ";
 	for( auto lb : libvec ) {
-		libs += lb;
+
+		auto libflagvecstr = config.GetDataString( "Deps", lb );
+
+		std::replace( libflagvecstr.begin(), libflagvecstr.end(), ',', ' ' );
+
+		libs += libflagvecstr;
 		libs += " ";
 	}
 
