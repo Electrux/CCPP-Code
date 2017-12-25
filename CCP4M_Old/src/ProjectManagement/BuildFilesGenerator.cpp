@@ -147,8 +147,10 @@ int GetBuildData( ConfigMgr & config, ProjectData & data, std::string & mainsrc,
 		  std::string & flags, std::string & libs,
 		  std::vector< std::string > & othersrc )
 {
-	if( config.RetrieveConfig( "." ) != 0 )
+	if( config.RetrieveConfig( "." ) != 0 ) {
+		std::cerr << "Error: No project ini file detected in current directory!" << std::endl;
 		return 1;
+	}
 
 	data.name = config.GetDataString( "Core", "Name" );
 	data.deps = DelimStringToVector( config.GetDataString( "Core", "Libs" ) );
