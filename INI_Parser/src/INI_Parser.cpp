@@ -36,10 +36,25 @@ namespace Electrux
 
 		bool found_equals = false;
 
+		bool found_quote = false;
+		char quote_type;
+
 		for( auto ch : str )
 		{
-			if( ch == ' ' )
+			if( ch == ' ' && !found_quote )
 				continue;
+
+			if( ch == '\'' || ch == '\"' ) {
+				if( found_quote && quote_type == ch ) {
+					found_quote = !found_quote;
+					continue;
+				}
+				else if( !found_quote ) {
+					found_quote = !found_quote;
+					quote_type = ch;
+					continue;
+				}
+			}
 
 			if( ch == '=' )
 				found_equals = true;
