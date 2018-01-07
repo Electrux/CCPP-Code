@@ -2,13 +2,15 @@
 // Created by electrux on 7/25/17.
 //
 
-#ifndef INI_PARSER_ENUMS_HPP
-#define INI_PARSER_ENUMS_HPP
+#ifndef DATAVARS_HPP
+#define DATAVARS_HPP
 
 #include <string>
 
 namespace Electrux
 {
+	// These status codes define various results of functions depending on
+	// what happened in it.
 	enum STATUS_CODES
 	{
 		SUCCESS,
@@ -24,20 +26,23 @@ namespace Electrux
 		KEY_ALREADY_EXISTS,
 		INVALID_DATA_TYPE,
 		DATA_OUT_OF_RANGE,
-		
+
 		NONE,
-		
+
 		LAST_ELEMENT
 	};
-	
+
+	// Errors can be thrown as exceptions or just on standard output.
+	// Exceptions will cause the program to end.
 	enum FATAL_ERROR_MODES
 	{
 		THROW_EXCEPTION,
 		STDOUT
 	};
-	
-	const std::string STATUS_MSG[LAST_ELEMENT] = {
-		
+
+	// String equivalents of the status codes.
+	const std::string STATUS_MSG[ LAST_ELEMENT ] = {
+
 		"Success",
 		"File not found",
 		"Could not open file ( Unknown error )",
@@ -51,10 +56,10 @@ namespace Electrux
 		"Key already exists",
 		"Invalid data type",
 		"Data out of range",
-		
+
 		"None"
-		
+
 	};
 }
 
-#endif //INI_PARSER_ENUMS_HPP
+#endif // DATAVARS_HPP

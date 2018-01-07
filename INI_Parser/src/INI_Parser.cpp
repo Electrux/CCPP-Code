@@ -34,6 +34,9 @@ namespace Electrux
 		    str.find( ']' ) != std::string::npos )
 			return false;
 
+		if( * str.begin() == '#' )
+			return false;
+
 		bool found_equals = false;
 
 		bool found_quote = false;
@@ -56,7 +59,7 @@ namespace Electrux
 				}
 			}
 
-			if( ch == '=' )
+			if( ch == '=' && !found_equals )
 				found_equals = true;
 			else
 				(found_equals) ? val += ch : key += ch;

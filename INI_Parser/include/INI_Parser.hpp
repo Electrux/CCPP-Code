@@ -2,8 +2,8 @@
 // Created by electrux on 7/25/17.
 //
 
-#ifndef INI_PARSER_INI_PARSER_HPP
-#define INI_PARSER_INI_PARSER_HPP
+#ifndef INI_PARSER_HPP
+#define INI_PARSER_HPP
 
 #include <iostream>
 #include <fstream>
@@ -122,4 +122,4 @@ namespace Electrux
 	};
 }
 
-#endif //INI_PARSER_INI_PARSER_HPP
+#endif //INI_PARSER_HPP
