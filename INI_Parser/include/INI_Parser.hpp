@@ -101,6 +101,8 @@ namespace Electrux
 		STATUS_CODES GetDataFloat( const std::string &section,
 					   const std::string &key,
 					   float &store_location );
+
+		std::map< std::string, std::shared_ptr< Section > > & GetAllSections();
 		
 		// Retrieve last occured error as string or its code, or display it.
 		// Prefer using Display because it automatically prints to std::cerr if

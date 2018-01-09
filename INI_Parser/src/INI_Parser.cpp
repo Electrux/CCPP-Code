@@ -44,6 +44,9 @@ namespace Electrux
 
 		for( auto ch : str )
 		{
+			if( ch == '\t' )
+				ch = ' ';
+
 			if( ch == ' ' && !found_quote )
 				continue;
 
@@ -432,6 +435,11 @@ namespace Electrux
 		}
 
 		return this->SetLastStatusCode( SUCCESS, "Electrux::INI_Parser::GetDataFloat()" );
+	}
+
+	std::map< std::string, std::shared_ptr< Section > > & INI_Parser::GetAllSections()
+	{
+		return this->sections;
 	}
 
 	// Retrieve last occured error as string or its code, or display it.
