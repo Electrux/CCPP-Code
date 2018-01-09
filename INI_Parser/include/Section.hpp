@@ -13,16 +13,6 @@
 
 namespace Electrux
 {
-	// The data will store key and its value, and
-	// smart pointers previous and next are used to cycle through all of the key value pairs.
-	struct Data
-	{
-		std::string key;
-		std::string val;
-		
-		std::shared_ptr<Data> prev, next;
-	};
-
 	// Section is the class which manages all the key value pairs ( data ) for each section,
 	// aknowledged by section name.
 	class Section
