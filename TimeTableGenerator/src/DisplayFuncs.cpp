@@ -70,6 +70,9 @@ void DisplayOneLinerString( const std::string & str )
 
 void DisplayData( const std::string & data )
 {
+	if( data.find( '\n' ) != std::string::npos )
+		one_liner = 0;
+
 	if( data == "\n" ) {
 		std::cout << "\n" << RESET;
 		std::cout.flush();

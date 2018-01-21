@@ -11,7 +11,7 @@ void Randomize( const int attempt )
 {
 	std::srand( std::time( NULL ) );
 
-	MoveOutputCursorBack();
+	//MoveOutputCursorBack();
 	DisplayData( "\n{G}Info: Using a new random seed, attempt: {C}" + std::to_string( attempt ) + " {G}... " );
 }
 
@@ -49,14 +49,23 @@ bool FindSolution( const int tablecount, const int rows, const int cols, std::ve
 
 		ClearTables( tables, tablecount );
 
-		if( ArrangeInTables( tables, tablecount, rows, cols, alldata ) )
+		if( ArrangeInTables( tables, tablecount, rows, cols, alldata ) ) {
 			foundsol = true;
+			DisplayOneLinerString( "{BC}Success!" );
+			break;
+		}
 
 		if( ctr % ( 300000 * tablecount ) == 0 ) {
 			ctr = 0;
+			DisplayOneLinerString( "{BR}Failed!" );
 			Randomize( ++attempt );
 		}
 		++ctr;
+	}
+
+	if( foundsol ) {
+		for( int i = 0; i < tablecount; ++i )
+			DisplayTable( tables[ i ] );
 	}
 
 	DeAllocateTables( tables, tablecount, rows );
@@ -94,9 +103,6 @@ bool ArrangeInTables( Table * tables, const int tablecount, const int rows, cons
 			if( !InsertDataInTable( tables, tablecount, i, data ) )
 				return false;
 	}
-
-	for( int i = 0; i < tablecount; ++i )
-		DisplayTable( tables[ i ] );
 
 	return true;
 }
