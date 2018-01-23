@@ -15,13 +15,15 @@ int main( int argc, char ** argv )
 
 	std::string line;
 
-	std::vector< std::vector< DataType::Data > > data;
+	std::vector< std::vector< DataType::Data > > alldata;
 
 	while( std::getline( file, line ) ) {
+		if( line.empty() || line == "\n" )
+			continue;
 
 		auto dataline = Lexer::ParseLexicoSymbols( line );
 		if( !dataline.empty() )
-		data.push_back( dataline );
+			alldata.push_back( dataline );
 	}
 
 	return 0;

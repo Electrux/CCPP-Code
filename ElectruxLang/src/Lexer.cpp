@@ -106,10 +106,6 @@ namespace Lexer
 
 		int indent = GetIndentLevel( line );
 
-		if( lineparts.empty() ||
-		    lineparts[ 0 ] == DataType::KEYWORDS_STR[ DataType::LINECOMMENT ] )
-			return dataline;
-
 		DataType::Data dat;
 
 		dat.type = DataType::SEPARATOR;

@@ -1,6 +1,7 @@
-#include <iostream>
 #include <vector>
 #include <string>
+
+#include "../include/DataTypes.hpp"
 
 #include "../include/StringFuncs.hpp"
 
@@ -23,8 +24,12 @@ std::vector< std::string > DelimitString( const std::string & str, char delim )
 
 	for( auto ch = str.begin(); ch != str.end(); ++ch ) {
 
+		// Stop reading line on comment.
+		if( * ch == * DataType::KEYWORDS_STR[ DataType::LINECOMMENT ].begin() )
+			break;
+
 		// Tabs and spaces for indentation
-		if( *ch == '\t' )
+		if( * ch == '\t' )
 			continue;
 
 		if( ( ch + 3 ) < str.end() &&
