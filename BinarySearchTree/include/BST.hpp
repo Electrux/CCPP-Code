@@ -96,26 +96,19 @@ template <class T> bool bs_tree<T>::delete_data(bintree<T> *node, T data)
 			if (walker->left == nullptr)
 			{
 				//This is the left child of its parent.
-				if (walker->parent->left == walker)
-				{
-					walker->parent->left = nullptr;
-				}
 				//Otherwise this is the right child of its parent.
+				if (walker->parent->left == walker)
+					walker->parent->left = nullptr;
 				else
-				{
 					walker->parent->right = nullptr;
-				}
 
 				//If the level count in levelmap of this level is 1, erase the level from levelmap.
-				if (levelmap[walker->level] == 1)
-				{
-					levelmap.erase(walker->level);
-				}
 				//Otherwise decrement the count of this level in levelmap.
+				if (levelmap[walker->level] == 1)
+					levelmap.erase(walker->level);
 				else
-				{
 					levelmap[walker->level]--;
-				}
+
 				//Delete the traveller, deallocate memory.
 				delete walker;
 
@@ -160,10 +153,12 @@ template <class T> bool bs_tree<T>::delete_data(bintree<T> *node, T data)
 	//This node aint the required data. Dive deeper.
 	else
 	{
-		//If there is something on the left and data to be deleted is less than this node's data, go left. 
-		if (data < walker->data && walker->left != nullptr) delete_data(walker->left, data);
+		//If there is something on the left and data to be deleted is less than this node's data, go left.
 		//Otherwise, go right if the right node is not nullptr.
-		else if (walker->right != nullptr) delete_data(walker->right, data);
+		if (data < walker->data && walker->left != nullptr)
+			delete_data(walker->left, data);
+		else if (walker->right != nullptr)
+			delete_data(walker->right, data);
 
 		//After deleting completing the recursion, return true since the job has been taken care of.
 		return true;
@@ -176,9 +171,11 @@ template <class T> bool bs_tree<T>::decrease_levelmap(int level)
 	if (levelmap.count(level) > 0)
 	{
 		//If the levelmap has only one count of that value, remove the level from the map.
-		if (levelmap[level] == 1) levelmap.erase(level);
 		//Otherwise decrease the count.
-		else levelmap[level]--;
+		if (levelmap[level] == 1)
+			levelmap.erase(level);
+		else
+			levelmap[level]--;
 
 		//All good. Return true.
 		return true;
@@ -248,10 +245,11 @@ template <class T> bool bs_tree<T>::insert_data(T data)
 					tree->left->level = tempcounter;
 
 					//If there is no key in levelmap of this counter, set the count to be one.
-					if (levelmap.count(tempcounter) == 0) levelmap[tempcounter] = 1;
-
 					//Otherwise, increment the counter.
-					else levelmap[tempcounter]++;
+					if (levelmap.count(tempcounter) == 0)
+						levelmap[tempcounter] = 1;
+					else
+						levelmap[tempcounter]++;
 					
 					//All done. Now break.
 					done = true;
@@ -328,10 +326,12 @@ template <class T> bintree<T> *bs_tree<T>::get_inorder_successor(bintree<T> *nod
 	bintree<T> *orig = node, *newvar = nullptr;
 	
 	//If this node is nullptr, return nullptr. Cant find inorder successor of nullptr afterall.
-	if (node == nullptr) return nullptr;
+	if (node == nullptr)
+		return nullptr;
 
 	//If there is no left and right of this node (both are nullptr, return nullptr.
-	if (node->left == nullptr && node->right == nullptr) return nullptr;
+	if (node->left == nullptr && node->right == nullptr)
+		return nullptr;
 
 	//Run this loop while this node isnt equal to nullptr.
 	while (node != nullptr)
@@ -349,9 +349,12 @@ template <class T> bintree<T> *bs_tree<T>::get_inorder_successor(bintree<T> *nod
 		else
 		{
 			//If the left of this node is nullptr and this node is not the original given node, check if there is something on the left of the left of this node.
+			//Otherwise, if the right of this node is not nullptr and this node is original node, check the left of the right of this node.
+			//Otherwise, set the inorder successor to be equal to this node and break the loop.
 			if (node->left != nullptr && node != orig)
 			{
 				//If the left of the left of this node is nullptr, we found the inorder successor of the given node.
+				//Otherwise, set the traveller to be the left of this node and repeat the loop.
 				if (node->left->left == nullptr)
 				{
 					//Set the inorder successor equal to the left of this node.
@@ -360,29 +363,25 @@ template <class T> bintree<T> *bs_tree<T>::get_inorder_successor(bintree<T> *nod
 					//Break the loop.
 					break;
 				}
-				//Otherwise, set the traveller to be the left of this node and repeat the loop.
 				else
 				{
 					node = node->left;
 				}
 			}
-
-			//Otherwise, if the right of this node is not nullptr and this node is original node, check the left of the right of this node.
 			else if (node->right != nullptr && node == orig)
 			{
 				//If the left of the right of this node is not nullptr, set the left of the right of this node to be the traveller and repeat the loop.
+				//Otherwise set the inorder successor to be the right of this node and break the loop.
 				if (node->right->left != nullptr)
 				{
 					node = node->right->left;
 				}
-				//Otherwise set the inorder successor to be the right of this node and break the loop.
 				else
 				{
 					newvar = node->right;
 					break;
 				}
 			}
-			//Otherwise, set the inorder successor to be equal to this node and break the loop.
 			else
 			{
 				newvar = node;
@@ -395,7 +394,9 @@ template <class T> bintree<T> *bs_tree<T>::get_inorder_successor(bintree<T> *nod
 	node = orig;
 
 	//If the original node and its inorder successor are same, there is no inorder successor of the original node and therefore return nullptr.
-	if (orig == newvar) return nullptr;
+	if (orig == newvar)
+		return nullptr;
+
 	//Otherwise return the inorder successor.
 	return newvar;
 }
@@ -415,16 +416,16 @@ template <class T> void bs_tree<T>::display_tree(bintree<T> *temp, int trav_type
 		if (temp != nullptr)
 		{
 			//If the parent of this node is not nullptr, display which side of its parent this node falls in.
+			//The parent of this node is nullptr, meaning, this node is root.
 			if (temp->parent != nullptr)
 			{
 				//If this is left child of its parent, show as left child.
+				//Otherwise show as right child.
 				if (temp->parent->left == temp)
 					std::cout << "Left child of Parent = " << temp->parent->data << "\tData = " << temp->data;
-				//Otherwise show as right child.
 				else
 					std::cout << "Right child of Parent = " << temp->parent->data << "\tData = " << temp->data;
 			}
-			//The parent of this node is nullptr, meaning, this node is root.
 			else
 			{
 				//Display this node as root.
@@ -457,9 +458,9 @@ template <class T> void bs_tree<T>::display_tree(bintree<T> *temp, int trav_type
 			if (temp->parent != nullptr)
 			{
 				//If this is left child of its parent, show as left child.
+				//Otherwise show as right child.
 				if (temp->parent->left == temp)
 					std::cout << "Left child of Parent = " << temp->parent->data << "\tData = " << temp->data;
-				//Otherwise show as right child.
 				else
 					std::cout << "Right child of Parent = " << temp->parent->data << "\tData = " << temp->data;
 			}
@@ -487,9 +488,9 @@ template <class T> void bs_tree<T>::display_tree(bintree<T> *temp, int trav_type
 			if (temp->parent != nullptr)
 			{
 				//If this is left child of its parent, show as left child.
+				//Otherwise show as right child.
 				if (temp->parent->left == temp)
 					std::cout << "Left child of Parent = " << temp->parent->data << "\tData = " << temp->data;
-				//Otherwise show as right child.
 				else
 					std::cout << "Right child of Parent = " << temp->parent->data << "\tData = " << temp->data;
 			}
