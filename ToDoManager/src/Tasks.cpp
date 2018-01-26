@@ -16,7 +16,12 @@ Tasks::Tasks( std::string _filename )
 
 	if( !file ) {
 
-		std::cerr << "Could not create/open file." << std::endl;
+		file.open( _filename, std::ios::out );
+		if( !file ) {
+			std::cerr << "Could not create/open file." << std::endl;
+			return;
+		}
+		file.close();
 		return;
 	}
 
