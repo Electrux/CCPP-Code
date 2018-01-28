@@ -1,6 +1,7 @@
 # Build files #
 ###############
 build/
+.vscode/
 
 # Compiled source #
 ###################
