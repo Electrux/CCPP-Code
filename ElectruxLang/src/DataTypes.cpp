@@ -25,6 +25,9 @@ namespace DataType
 	std::vector< std::string > KEYWORDS_STR = {
 
 		"var",
+		"vecvar",
+
+		"fn",
 
 		"if",
 		"elseif",
@@ -76,7 +79,9 @@ namespace DataType
 		"\t",
 
 		".",
+		"->",
 		":",
+		",",
 
 		"(",
 		")",

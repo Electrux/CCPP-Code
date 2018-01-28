@@ -1,0 +1,111 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+
+#include "../include/Errors.hpp"
+#include "../include/Vars.hpp"
+#include "../include/VectorVars.hpp"
+#include "../include/DataTypes.hpp"
+
+#include "../include/Functions.hpp"
+
+Function::Function()
+{
+}
+
+Function::~Function()
+{
+	Vars::DelSingleton( "fn_" + name );
+	args = nullptr;
+
+	VectorVars::DelSingleton( "fn_" + name );
+	vecargs = nullptr;
+}
+
+Function * Function::GetSingleton( const std::string & fnname )
+{
+	if( allfuncs.find( fnname ) != allfuncs.end() )
+		return allfuncs[ fnname ];
+
+	allfuncs[ fnname ] = new Function;
+	allfuncs[ fnname ]->name = fnname;
+
+	allfuncs[ fnname ]->args = Vars::GetSingleton( "fn_" + fnname );
+	allfuncs[ fnname ]->vecargs = VectorVars::GetSingleton( "fn_" + fnname );
+
+	return allfuncs[ fnname ];
+}
+
+ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, const int & startline )
+{
+	int indent = alldata[ startline ][ 0 ].detailtype;
+
+	if( alldata[ startline ].size() < 6) {
+		std::cerr << "Error at line: " << startline << ": Function definition must have the syntax:\n"
+			<< "\tfn < name > ( < args > ) :" << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	if( alldata[ startline ][ 2 ].type != DataType::IDENTIFIER ) {
+		std::cerr << "Error at line: " << startline << ": Must specify a function name of type: identifier!" << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	// Create function instance using the function name.
+	auto fn = GetSingleton( alldata[ startline ][ 2 ].word );
+
+	int args = GetArgCount( alldata[ startline ] );
+
+	//SetArgs
+
+	if( args == -1 ) {
+		std::cerr << "Error in function definition parenthesis syntax at line: " << startline << "!" << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	int i = startline + 1;
+	while( alldata[ i ][ 0 ].detailtype > indent ) {
+		fn->lines.push_back( alldata[ i ] );
+		++i;
+	}
+
+	std::cout << "Function: " << fn->name << "\tArgs: " << args << std::endl;
+
+	return SUCCESS;
+}
+
+ErrorTypes Function::ExecuteFunction()
+{}
+
+bool Function::DelSingleton( const std::string & fnname )
+{}
+
+int GetArgCount( const std::vector< DataType::Data > & dataline )
+{
+	int i = 0;
+
+	int bracketopenloc = -1, bracketcloseloc = -1, commacount = 0;
+
+	// Locations of brackets, and count of commas.
+	for( auto data : dataline ) {
+		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISOPEN )
+			bracketopenloc = i;
+		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISCLOSE )
+			bracketcloseloc = i;
+
+		if( bracketopenloc != -1 && bracketcloseloc == -1 &&
+			data.type == DataType::SEPARATOR && data.detailtype == DataType::COMMA )
+			++commacount;
+		++i;
+	}
+
+	// Suntactic error!
+	if( bracketopenloc == -1 || bracketcloseloc == -1 )
+		return -1;
+
+	if( bracketopenloc == bracketcloseloc - 1 )
+		return 0;
+	
+	return commacount == 0 ? 1 : commacount + 1;
+}

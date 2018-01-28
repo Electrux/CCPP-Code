@@ -5,6 +5,8 @@
 #include "../include/StringFuncs.hpp"
 #include "../include/DataTypes.hpp"
 
+#include "../include/Functions.hpp"
+
 #include "../include/Lexer.hpp"
 
 int main( int argc, char ** argv )
@@ -25,6 +27,9 @@ int main( int argc, char ** argv )
 		if( !dataline.empty() )
 			alldata.push_back( dataline );
 	}
+
+	std::cout << "Loading function..." << std::endl;
+	Function::LoadFunction( alldata, 1 );
 
 	return 0;
 }

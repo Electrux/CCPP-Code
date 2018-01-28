@@ -2,33 +2,26 @@
 #define ERRORS_HPP
 
 #include <string>
-#include <vector>
-
-struct Error
-{
-	int line;
-	ErrorTypes errtype;
-};
 
 enum ErrorTypes
 {
+	SUCCESS,
+	SYNTAX_ERROR,
 	BRACKET_MISMATCH,
+	DOUBLE_DECLARATION,
 
 	LAST
 };
 
 const std::string ErrorStrings[ LAST + 1 ] = {
+	"SUCCESS",
+	"SYNTAX_ERROR",
 	"BRACKET_MISMATCH",
+	"DOUBLE_DECLARATION",
 
 	"UNKNOWN"
 };
 
-std::string ErrorToStr( ErrorTypes errtype )
-{
-	if( errtype < 0 || errtype >= LAST )
-		return ErrorStrings[ LAST ];
-
-	return ErrorStrings[ errtype ];
-}
+std::string ErrorToStr( ErrorTypes errtype );
 
 #endif // ERRORS_HPP

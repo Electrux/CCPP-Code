@@ -97,12 +97,14 @@ namespace Lexer
 		return "none";
 	}
 
-	std::vector< DataType::Data >
-	ParseLexicoSymbols( const std::string & line )
+	std::vector< DataType::Data > ParseLexicoSymbols( const std::string & line )
 	{
 		std::vector< DataType::Data > dataline;
 
 		auto lineparts = DelimitString( line );
+
+		if( lineparts.empty() )
+			return dataline;
 
 		int indent = GetIndentLevel( line );
 

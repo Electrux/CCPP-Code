@@ -26,6 +26,9 @@ namespace DataType
 	enum Keywords
 	{
 		VAR,
+		VECVAR,
+
+		FN,
 
 		IF,
 		ELSEIF,
@@ -76,7 +79,9 @@ namespace DataType
 		NEWLINE,
 		TAB,
 		DOT,
+		ARROW,
 		BLOCKBEGIN,
+		COMMA,
 		PARENTHESISOPEN,
 		PARENTHESISCLOSE,
 		CURLYBRACESOPEN,
