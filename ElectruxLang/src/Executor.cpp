@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -5,37 +6,56 @@
 #include "../include/Errors.hpp"
 #include "../include/DataTypes.hpp"
 #include "../include/Vars.hpp"
+#include "../include/Functions.hpp"
+#include "../include/LineTypeIncs.hpp"
 
 #include "../include/Executor.hpp"
 
 static int currentline = 0;
 
-ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata )
+ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata,
+		const std::string & space, const std::string & func )
 {
 	ErrorTypes err = ErrorTypes::SUCCESS;
-	auto v = Vars::GetSingleton( "global" );
-	std::map< std::string, int > vardeclline;
 
 	for( int i = 0; i < alldata.size(); ++i ) {
 		// TODO
-		//if( ( err = ValidateStatement( alldata[ i ], v, vardeclline, i ) ) != SUCCESS )
+		if( ( err = ExecuteStatement( alldata, i, space, func ) ) != SUCCESS )
 			return err;
 
 		++currentline;
 	}
 
-	Vars::DelSingleton( "global" );
+	return SUCCESS;
 }
 
-ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, const int & line,
-			std::map< std::string, int > & vardeclline )
+ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, int & line,
+			const std::string & space, const std::string & func )
 {
-	// Use index 1 element in each line because the first element is tab count.
+	ErrorTypes err = SUCCESS;
+
+	// There is index 1 element in each line because the first element is tab count.
 	if( alldata[ line ].size() < 2 )
-		return ErrorTypes::SUCCESS;
+		return err;
 
-	if( alldata[ line ][ 1 ].type == DataType::VAR ) {
+	if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::PRINT ) {
+		err = ExecutePrint( alldata[ line ], space, func );
+	}
+	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::VAR ) {
+	}
+	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::FN ) {
+		err = Function::LoadFunction( alldata, line );
+	}
+	else if( alldata[ line ].size() > 2 && alldata[ line ][ 1 ].type == DataType::IDENTIFIER &&
+		alldata[ line ][ 2 ].type == DataType::SEPARATOR && alldata[ line ][ 2 ].detailtype == DataType::PARENTHESISOPEN ) {
 
+		auto func = Function::GetSingleton( alldata[ line ][ 1 ].word );
+		if( func == nullptr ) {
+			std::cerr << "Error on line: " << alldata[ line ][ 0 ].fileline << ": No function named: "
+				<< alldata[ line ][ 1 ].word << " exists!" << std::endl;
+			return ENTITY_NOT_FOUND;
+		}
+		func->ExecuteFunction();
 	}
 
 	return SUCCESS;

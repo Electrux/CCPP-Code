@@ -8,7 +8,7 @@
 namespace Lexer
 {
 	std::vector< DataType::Data >
-	ParseLexicoSymbols( const std::string & line );
+	ParseLexicoSymbols( const std::string & line, const int & fileline );
 }
 
 #endif // LEXER_HPP

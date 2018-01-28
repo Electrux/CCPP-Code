@@ -15,6 +15,9 @@ Vars::~Vars()
 
 Vars * Vars::GetSingleton( const std::string & space )
 {
+	if( space.empty() )
+		return nullptr;
+
 	if( spaces.find( space ) != spaces.end() )
 		return spaces[ space ];
 

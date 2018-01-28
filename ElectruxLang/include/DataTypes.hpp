@@ -95,6 +95,12 @@ namespace DataType
 		SymbolType type;
 		int detailtype;
 		std::string word;
+
+		// Exclusively for indent.
+		int indent;
+
+		// Line number corresponding to file.
+		int fileline;
 	};
 
 	extern std::vector< std::string > SYMBOL_STR;

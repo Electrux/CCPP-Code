@@ -5,7 +5,7 @@
 #include "../include/StringFuncs.hpp"
 #include "../include/DataTypes.hpp"
 
-#include "../include/Functions.hpp"
+#include "../include/Executor.hpp"
 
 #include "../include/Lexer.hpp"
 
@@ -19,17 +19,22 @@ int main( int argc, char ** argv )
 
 	std::vector< std::vector< DataType::Data > > alldata;
 
+	int fileline = 1;
 	while( std::getline( file, line ) ) {
-		if( line.empty() || line == "\n" )
+		if( line.empty() || line == "\n" ) {
+			++fileline;
 			continue;
+		}
 
-		auto dataline = Lexer::ParseLexicoSymbols( line );
+		auto dataline = Lexer::ParseLexicoSymbols( line, fileline );
 		if( !dataline.empty() )
 			alldata.push_back( dataline );
+		++fileline;
 	}
 
-	std::cout << "Loading function..." << std::endl;
-	Function::LoadFunction( alldata, 1 );
+	std::cout << "\n\nExecuting...\n\n";
+
+	ExecuteAll( alldata );
 
 	return 0;
 }

@@ -26,7 +26,7 @@ public:
 
 	static Function * GetSingleton( const std::string & fnname );
 
-	static ErrorTypes LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, const int & startline );
+	static ErrorTypes LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, int & startline );
 	ErrorTypes ExecuteFunction();
 
 	static bool DelSingleton( const std::string & fnname );

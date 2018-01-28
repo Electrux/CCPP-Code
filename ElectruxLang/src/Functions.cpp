@@ -7,6 +7,7 @@
 #include "../include/Vars.hpp"
 #include "../include/VectorVars.hpp"
 #include "../include/DataTypes.hpp"
+#include "../include/Executor.hpp"
 
 #include "../include/Functions.hpp"
 
@@ -37,18 +38,19 @@ Function * Function::GetSingleton( const std::string & fnname )
 	return allfuncs[ fnname ];
 }
 
-ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, const int & startline )
+ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, int & startline )
 {
-	int indent = alldata[ startline ][ 0 ].detailtype;
+	int indent = alldata[ startline ][ 0 ].indent;
+	int currentfileline = alldata[ startline ][ 0 ].fileline;
 
-	if( alldata[ startline ].size() < 6) {
-		std::cerr << "Error at line: " << startline << ": Function definition must have the syntax:\n"
-			<< "\tfn < name > ( < args > ) :" << std::endl;
+	if( alldata[ startline ].size() < 6 ) {
+		std::cerr << "Error at line: " << currentfileline << ": Function definition must have the syntax:\n"
+			<< "\tfn < name >( < args > ) :" << std::endl;
 		return SYNTAX_ERROR;
 	}
 
 	if( alldata[ startline ][ 2 ].type != DataType::IDENTIFIER ) {
-		std::cerr << "Error at line: " << startline << ": Must specify a function name of type: identifier!" << std::endl;
+		std::cerr << "Error at line: " << currentfileline << ": Must specify a function name of type: identifier!" << std::endl;
 		return SYNTAX_ERROR;
 	}
 
@@ -60,23 +62,35 @@ ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Dat
 	//SetArgs
 
 	if( args == -1 ) {
-		std::cerr << "Error in function definition parenthesis syntax at line: " << startline << "!" << std::endl;
+		std::cerr << "Error in function definition parenthesis syntax at line: " << currentfileline << "!" << std::endl;
 		return SYNTAX_ERROR;
 	}
 
 	int i = startline + 1;
-	while( alldata[ i ][ 0 ].detailtype > indent ) {
+	while( i < alldata.size() && alldata[ i ][ 0 ].indent > indent ) {
 		fn->lines.push_back( alldata[ i ] );
 		++i;
 	}
 
-	std::cout << "Function: " << fn->name << "\tArgs: " << args << std::endl;
+	if( fn->lines.empty() ) {
+		std::cerr << "Error at line: " << currentfileline << ": No definition for the function provided!" << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	startline += fn->lines.size();
 
 	return SUCCESS;
 }
 
 ErrorTypes Function::ExecuteFunction()
-{}
+{
+	ErrorTypes err = SUCCESS;
+
+	if( ( err = ExecuteAll( lines, "global", name ) ) != SUCCESS )
+		return err;
+
+	return err;
+}
 
 bool Function::DelSingleton( const std::string & fnname )
 {}

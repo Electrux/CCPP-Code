@@ -7,6 +7,7 @@ enum ErrorTypes
 {
 	SUCCESS,
 	SYNTAX_ERROR,
+	ENTITY_NOT_FOUND,
 	BRACKET_MISMATCH,
 	DOUBLE_DECLARATION,
 
@@ -16,6 +17,7 @@ enum ErrorTypes
 const std::string ErrorStrings[ LAST + 1 ] = {
 	"SUCCESS",
 	"SYNTAX_ERROR",
+	"ENTITY_NOT_FOUND",
 	"BRACKET_MISMATCH",
 	"DOUBLE_DECLARATION",
 

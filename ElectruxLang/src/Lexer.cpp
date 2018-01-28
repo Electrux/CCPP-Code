@@ -97,7 +97,7 @@ namespace Lexer
 		return "none";
 	}
 
-	std::vector< DataType::Data > ParseLexicoSymbols( const std::string & line )
+	std::vector< DataType::Data > ParseLexicoSymbols( const std::string & line, const int & fileline )
 	{
 		std::vector< DataType::Data > dataline;
 
@@ -112,17 +112,19 @@ namespace Lexer
 
 		dat.type = DataType::SEPARATOR;
 		dat.word = "\t";
+		dat.indent = indent;
+		dat.fileline = fileline;
 
 		SetDetailType( dat );
 
 		dataline.push_back( dat );
-		std::cout << "(" << DataType::SYMBOL_STR[ DataType::SEPARATOR ]
+		std::cout << "(" << DataType::SYMBOL_STR[ dat.type ]
 			  << ", " << dat.detailtype
 			  << ", " << std::to_string( indent ) << ") ";
 
 		for( auto data : lineparts ) {
 
-			DataType::Data d = { DataType::GetDataType( data ), -1, data };
+			DataType::Data d = { DataType::GetDataType( data ), -1, data, indent, fileline };
 			SetDetailType( d );
 			dataline.push_back( d );
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -55,7 +56,7 @@ std::vector< std::string > DelimitString( const std::string & str, char delim )
 		}
 
 		// Handle separators.
-		if( std::find( DataType::SEPARATORS_STR.begin(),
+		if( !inquote && std::find( DataType::SEPARATORS_STR.begin(),
 			DataType::SEPARATORS_STR.end(), std::string( 1, * ch ) ) != DataType::SEPARATORS_STR.end() ||
 			( * ch == '-' && ch + 1 != str.end() && * ( ch + 1 ) == '>' ) ) {
 
@@ -157,4 +158,69 @@ int GetIndentLevel( const std::string & str )
 	}
 
 	return ctr;
+}
+
+bool StringToInteger( const std::string & str, int & val )
+{
+	int res;
+	try {
+		res = std::stoi( str );
+	}
+	catch( const std::invalid_argument & ia ) {
+		return false;
+	}
+
+	val = res;
+
+	return true;
+}
+
+template< typename T > std::string VectorToString( const std::vector< T > & vec )
+{
+	if( vec.size() < 1 )
+		return "";
+
+	return VectorToString< T >( vec );
+}
+
+template <> std::string VectorToString< std::string >( const std::vector< std::string > & vec )
+{
+	std::string temp;
+	temp += "[ ";
+	for( int i = 0; i < vec.size(); ++i ) {
+		temp += "\'" + vec[ i ] + "\'";
+		if( i != vec.size() - 1 )
+			temp += ", ";
+	}
+	temp += " ]";
+
+	return temp;
+}
+
+template <> std::string VectorToString< int >( const std::vector< int > & vec )
+{
+	std::string temp;
+	temp += "[ ";
+	for( int i = 0; i < vec.size(); ++i ) {
+		temp +=  "\'" + std::to_string( vec[ i ] ) + "\'";
+		if( i != vec.size() - 1 )
+			temp += ", ";
+	}
+	temp += " ]";
+
+	return temp;
+}
+
+template <> std::string VectorToString< float >( const std::vector< float > & vec )
+{
+	std::string temp;
+	temp += "[ ";
+	for( int i = 0; i < vec.size(); ++i ) {
+		temp +=  "\'" + std::to_string( vec[ i ] ) + "\'";
+		if( i != vec.size() - 1 )
+			temp += ", ";
+	}
+	temp += " ]";
+
+	return temp;
 }
