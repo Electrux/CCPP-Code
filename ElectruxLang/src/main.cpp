@@ -4,6 +4,8 @@
 
 #include "../include/StringFuncs.hpp"
 #include "../include/DataTypes.hpp"
+#include "../include/Functions.hpp"
+#include "../include/Vars.hpp"
 
 #include "../include/Executor.hpp"
 
@@ -34,7 +36,13 @@ int main( int argc, char ** argv )
 
 	std::cout << "\n\nExecuting...\n\n";
 
+	Vars::InitializeVars();
+
 	ExecuteAll( alldata );
+
+	// Cleanup
+	Function::DelAllFuncs();
+	Vars::DelAllVars();
 
 	return 0;
 }

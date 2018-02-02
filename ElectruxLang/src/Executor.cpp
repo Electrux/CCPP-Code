@@ -15,7 +15,6 @@ static int currentline = 0;
 
 ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata )
 {
-	Vars::InitializeVars();
 	ErrorTypes err = ErrorTypes::SUCCESS;
 
 	for( int i = 0; i < alldata.size(); ++i ) {
@@ -24,10 +23,6 @@ ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alld
 
 		++currentline;
 	}
-
-	// Cleanup
-	Function::DelAllFuncs();
-	Vars::DelAllVars();
 
 	return SUCCESS;
 }

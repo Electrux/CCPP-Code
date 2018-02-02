@@ -71,6 +71,8 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 				if( args.size() > temp ) {
 					std::string res = FetchVarToString( args[ temp ], lineinfile );
 
+					RemoveTrailingQuotes( res );
+
 					if( res == "__E_R_R_O_R__" )
 						return -1;
 
