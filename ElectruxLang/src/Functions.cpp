@@ -4,8 +4,8 @@
 #include <map>
 
 #include "../include/Errors.hpp"
+#include "../include/GlobalData.hpp"
 #include "../include/Vars.hpp"
-#include "../include/VectorVars.hpp"
 #include "../include/DataTypes.hpp"
 #include "../include/Executor.hpp"
 
@@ -19,9 +19,6 @@ Function::~Function()
 {
 	Vars::DelSingleton( "fn_" + name );
 	args = nullptr;
-
-	VectorVars::DelSingleton( "fn_" + name );
-	vecargs = nullptr;
 }
 
 Function * Function::GetSingleton( const std::string & fnname )
@@ -33,7 +30,6 @@ Function * Function::GetSingleton( const std::string & fnname )
 	allfuncs[ fnname ]->name = fnname;
 
 	allfuncs[ fnname ]->args = Vars::GetSingleton( "fn_" + fnname );
-	allfuncs[ fnname ]->vecargs = VectorVars::GetSingleton( "fn_" + fnname );
 
 	return allfuncs[ fnname ];
 }
@@ -86,14 +82,24 @@ ErrorTypes Function::ExecuteFunction()
 {
 	ErrorTypes err = SUCCESS;
 
-	if( ( err = ExecuteAll( lines, "global", name ) ) != SUCCESS )
+	SetCurrentFunction( "fn_" + name );
+	if( ( err = ExecuteAll( lines ) ) != SUCCESS )
 		return err;
 
+	RemoveLastFunction();
 	return err;
 }
 
 bool Function::DelSingleton( const std::string & fnname )
-{}
+{
+	if( allfuncs.find( fnname ) == allfuncs.end() )
+		return false;
+
+	delete allfuncs[ fnname ];
+	allfuncs.erase( fnname );
+
+	return true;
+}
 
 int GetArgCount( const std::vector< DataType::Data > & dataline )
 {

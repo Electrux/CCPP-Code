@@ -7,13 +7,10 @@
 #include "../Errors.hpp"
 #include "../DataTypes.hpp"
 
-ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line,
-			const std::string & space = "global", const std::string & func = "" );
+ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line );
 
-int SubstituteVars( std::string & str, const std::vector< std::string > & args, const int & lineinfile,
-			const std::string & space = "global", const std::string & func = "" );
+int SubstituteVars( std::string & str, const std::vector< std::string > & args, const int & lineinfile );
 
-std::string VarToString( const std::string & var, const int & lineinfile,
-			const std::string & space = "global", const std::string & func = "" );
+std::string VarToString( const std::string & var, const int & lineinfile );
 
 #endif // PRINT_HPP

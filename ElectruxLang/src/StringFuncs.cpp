@@ -56,9 +56,17 @@ std::vector< std::string > DelimitString( const std::string & str, char delim )
 		}
 
 		// Handle separators.
-		if( !inquote && std::find( DataType::SEPARATORS_STR.begin(),
+		if( !inquote && ( std::find( DataType::SEPARATORS_STR.begin(),
 			DataType::SEPARATORS_STR.end(), std::string( 1, * ch ) ) != DataType::SEPARATORS_STR.end() ||
-			( * ch == '-' && ch + 1 != str.end() && * ( ch + 1 ) == '>' ) ) {
+			std::find( DataType::OPERATORS_STR.begin(),
+			DataType::OPERATORS_STR.end(), std::string( 1, * ch ) ) != DataType::OPERATORS_STR.end() ||
+			( * ch == '-' && ch + 1 != str.end() && * ( ch + 1 ) == '>' ) ) ) {
+
+			if( * ch == '.' && ch != str.begin() && ch + 1 != str.end() &&
+				( * ( ch - 1 ) == ' ' || std::isdigit( * ( ch - 1 ) ) ) && std::isdigit( * ( ch + 1 ) ) ) {
+				temp += * ch;
+				continue;
+			}
 
 			if( !temp.empty() )
 				tempvec.push_back( temp );

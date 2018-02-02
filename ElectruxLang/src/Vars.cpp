@@ -24,39 +24,25 @@ Vars * Vars::GetSingleton( const std::string & space )
 	spaces[ space ] = new Vars;
 	spaces[ space ]->spacename = space;
 
+	spaces[ space ]->vars[ "invalid" ] = { Vars::INVALID, "" };
+
 	return spaces[ space ];
 }
 
-void Vars::AddVars( const std::map< std::string, std::string > & vars )
+void Vars::AddVars( const std::map< std::string, Variable > & vars )
 {
 	for( auto elem : vars )
 		this->vars[ elem.first ] = elem.second;
 }
 
-void Vars::AddVar( const std::string & key, const std::string & val )
+void Vars::AddVar( const std::string & key, const Variable & val )
 {
 	vars[ key ] = val;
 }
 
-std::string & Vars::GetVar( const std::string & key )
+Variable & Vars::GetVar( const std::string & key )
 {
-	return vars[ key ];
-}
-
-int Vars::GetNumVar( const std::string & key )
-{
-	if( !VarExists( key ) )
-		return std::numeric_limits< int >::min();
-
-	return std::stoi( vars[ key ] );
-}
-
-float Vars::GetFloatVar( const std::string & key )
-{
-	if( !VarExists( key ) )
-		return std::numeric_limits< float >::infinity();
-
-	return std::stof( vars[ key ] );
+	return VarExists( key ) ? vars[ key ] : vars[ "invalid" ];
 }
 
 bool Vars::VarExists( const std::string & key )

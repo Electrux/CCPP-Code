@@ -7,25 +7,34 @@
 
 #include "DataTypes.hpp"
 
+struct Variable;
+
 // Singleton class.
 class Vars
 {
 	std::string spacename;
 
-	std::map< std::string, std::string > vars;
+	std::map< std::string, Variable > vars;
 
 	Vars();
 	~Vars();
 public:
+	enum VarType
+	{
+		NUM,
+		FLOAT,
+		STRING,
+
+		INVALID
+	};
+
 	static Vars * GetSingleton( const std::string & space );
 
-	void AddVars( const std::map< std::string, std::string > & vars );
+	void AddVars( const std::map< std::string, Variable > & vars );
 
-	void AddVar( const std::string & key, const std::string & val );
+	void AddVar( const std::string & key, const Variable & val );
 
-	std::string & GetVar( const std::string & key );
-	int GetNumVar( const std::string & key );
-	float GetFloatVar( const std::string & key );
+	Variable & GetVar( const std::string & key );
 
 	bool DeleteVar( const std::string & key );
 
@@ -34,6 +43,12 @@ public:
 	bool VarExists( const std::string & key );
 
 	bool IsEmpty();
+};
+
+struct Variable
+{
+	Vars::VarType vartype;
+	std::string data;
 };
 
 #endif // VARS_HPP

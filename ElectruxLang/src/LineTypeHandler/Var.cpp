@@ -5,11 +5,13 @@
 
 #include "../../include/Errors.hpp"
 #include "../../include/DataTypes.hpp"
+#include "../../include/GlobalData.hpp"
+#include "../../include/Vars.hpp"
+#include "../../include/ExpressionEvaluator.hpp"
 
 #include "../../include/LineTypeHandler/Var.hpp"
 
-ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & alldata, const int & line,
-			std::map< std::string, int > & vardeclline )
+ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & alldata, const int & line )
 {
 	auto currline = alldata[ line ];
 
@@ -21,4 +23,19 @@ ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & allda
 	}
 
 	// Now, evaluate the RHS expression.
+	Variable tempvar;
+
+	auto err = EvalExpression( alldata[ line ], 4, alldata[ line ].size() - 1, tempvar );
+	if( err != SUCCESS )
+		return err;
+
+	std::string space = GetCurrentFunction();
+	if( space.empty() )
+		space = "global";
+
+	auto v = Vars::GetSingleton( space );
+
+	v->AddVar( currline[ 2 ].word, tempvar );
+
+	return SUCCESS;
 }

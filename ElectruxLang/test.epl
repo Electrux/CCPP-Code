@@ -1,0 +1,5 @@
+var test = 0 + 5 / 3 + 'hello'
+
+fn func():
+	print 'hi {0}' var
+func()

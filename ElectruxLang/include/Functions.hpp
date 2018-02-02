@@ -7,7 +7,6 @@
 
 #include "Errors.hpp"
 #include "Vars.hpp"
-#include "VectorVars.hpp"
 #include "DataTypes.hpp"
 
 class Function
@@ -15,7 +14,6 @@ class Function
 	std::string name;
 
 	Vars * args;
-	VectorVars * vecargs;
 
 	std::vector< std::vector< DataType::Data > > lines;
 

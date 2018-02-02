@@ -8,10 +8,8 @@
 #include "Errors.hpp"
 #include "DataTypes.hpp"
 
-ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata,
-			const std::string & space = "global", const std::string & func = "" );
+ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata );
 
-ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, int & line,
-			const std::string & space = "global", const std::string & func = "" );
+ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, int & line );
 
 #endif // EXECUTOR_HPP

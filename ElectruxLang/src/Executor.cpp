@@ -13,14 +13,12 @@
 
 static int currentline = 0;
 
-ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata,
-		const std::string & space, const std::string & func )
+ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata )
 {
 	ErrorTypes err = ErrorTypes::SUCCESS;
 
 	for( int i = 0; i < alldata.size(); ++i ) {
-		// TODO
-		if( ( err = ExecuteStatement( alldata, i, space, func ) ) != SUCCESS )
+		if( ( err = ExecuteStatement( alldata, i ) ) != SUCCESS )
 			return err;
 
 		++currentline;
@@ -29,8 +27,7 @@ ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alld
 	return SUCCESS;
 }
 
-ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, int & line,
-			const std::string & space, const std::string & func )
+ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > & alldata, int & line )
 {
 	ErrorTypes err = SUCCESS;
 
@@ -39,9 +36,10 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 		return err;
 
 	if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::PRINT ) {
-		err = ExecutePrint( alldata[ line ], space, func );
+		err = ExecutePrint( alldata[ line ] );
 	}
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::VAR ) {
+		err = HandleVar( alldata, line );
 	}
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::FN ) {
 		err = Function::LoadFunction( alldata, line );
