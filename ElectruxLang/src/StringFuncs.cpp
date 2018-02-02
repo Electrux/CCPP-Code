@@ -62,6 +62,7 @@ std::vector< std::string > DelimitString( const std::string & str, char delim )
 			DataType::OPERATORS_STR.end(), std::string( 1, * ch ) ) != DataType::OPERATORS_STR.end() ||
 			( * ch == '-' && ch + 1 != str.end() && * ( ch + 1 ) == '>' ) ) ) {
 
+			// Leave Floating point values alone!
 			if( * ch == '.' && ch != str.begin() && ch + 1 != str.end() &&
 				( * ( ch - 1 ) == ' ' || std::isdigit( * ( ch - 1 ) ) ) && std::isdigit( * ( ch + 1 ) ) ) {
 				temp += * ch;
@@ -252,21 +253,22 @@ void ReplaceInString( std::string & str, const std::string & from, const std::st
 
 void RemoveTrailingQuotes( std::string & str )
 {
-	if( !str.empty() && ( * str.begin() == '\'' || * str.begin() == '\"' ) )
-		str.erase( str.begin() );
-
-	if( !str.empty() && ( * ( str.end() - 1 ) == '\'' || * ( str.end() - 1 ) == '\"' ) )
-		str.erase( str.end() - 1 );
+	str = RemoveTrailingQuotes( ( const std::string & )str );
 }
 
 std::string RemoveTrailingQuotes( const std::string & str )
 {
 	std::string tempstr = str;
-	if( !tempstr.empty() && ( * tempstr.begin() == '\'' || * tempstr.begin() == '\"' ) )
+	bool lhsdone = false, rhsdone = false;
+	if( !tempstr.empty() && ( * tempstr.begin() == '\'' || * tempstr.begin() == '\"' ) ) {
+		lhsdone = true;
 		tempstr.erase( tempstr.begin() );
+	}
 
-	if( !tempstr.empty() && ( * ( tempstr.end() - 1 ) == '\'' || * ( tempstr.end() - 1 ) == '\"' ) )
+	if( !tempstr.empty() && ( * ( tempstr.end() - 1 ) == '\'' || * ( tempstr.end() - 1 ) == '\"' ) ) {
+		rhsdone = true;
 		tempstr.erase( tempstr.end() - 1 );
+	}
 	
-	return tempstr;
+	return lhsdone && rhsdone ? tempstr : str;
 }

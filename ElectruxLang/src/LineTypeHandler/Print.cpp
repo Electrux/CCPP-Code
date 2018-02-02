@@ -83,6 +83,9 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 				auto v = Vars::GetSingleton( "__self_vars__" );
 				auto res = v->GetVar( var ).data;
 
+				if( res == "\n" )
+					len = 0;
+
 				it = str.insert( it, res.begin(), res.end() );
 				it += res.size();
 				len += res.size();
@@ -91,7 +94,7 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 			continue;
 		}
 
-		len = * it == '\n' ? 0 : len + 1;
+		len++;
 		++it;
 	}
 
