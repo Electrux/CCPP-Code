@@ -231,23 +231,15 @@ bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 	auto fv = Vars::GetSingleton( GetCurrentFunction() );
 	for( auto & data : postfixexpr ) {
 		if( data.type == DataType::IDENTIFIER ) {
-			Variable res = fv->GetVar( data.word );
-			if( res.vartype != Vars::INVALID ) {
-				data.type = DataType::GetDataType( res.data );
-				data.word = res.data;
-
-				continue;
-			}
-
-			res = v->GetVar( data.word );
-			if( res.vartype == Vars::INVALID ) {
-				std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": Unknown variable used: "
-					<< data.word << std::endl;
+			std::string res = FetchVarToString( data.word, data.fileline );
+			if( res == "__E_R_R_O_R__" ) {
 				return false;
 			}
 			else {
-				data.type = DataType::GetDataType( res.data );
-				data.word = res.data;
+				data.type = DataType::GetDataType( res );
+				data.word = res;
+
+				continue;
 			}
 		}
 

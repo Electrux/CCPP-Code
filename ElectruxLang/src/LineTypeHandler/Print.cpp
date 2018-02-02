@@ -16,7 +16,7 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 
 	int lineinfile = line[ 0 ].fileline;
 
-	std::string resultstring = VarToString( line[ 2 ].word, lineinfile );
+	std::string resultstring = FetchVarToString( line[ 2 ].word, lineinfile );
 
 	for( int i = 3; i < line.size(); ++i ) {
 		if( line[ i ].type != DataType::OPERATOR && line[ i ].type != DataType::LOGICAL &&
@@ -67,11 +67,21 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 			}
 			it = str.erase( it );
 
-			if( StringToInteger( var, temp ) && args.size() > temp ) {
-				std::string res = VarToString( args[ temp ], lineinfile );
+			if( StringToInteger( var, temp ) ) {
+				if( args.size() > temp ) {
+					std::string res = FetchVarToString( args[ temp ], lineinfile );
 
-				if( res == "__E_R_R_O_R__" )
-					return -1;
+					if( res == "__E_R_R_O_R__" )
+						return -1;
+
+					it = str.insert( it, res.begin(), res.end() );
+					it += res.size();
+					len += res.size();
+				}
+			}
+			else {
+				auto v = Vars::GetSingleton( "__self_vars__" );
+				auto res = v->GetVar( var ).data;
 
 				it = str.insert( it, res.begin(), res.end() );
 				it += res.size();
@@ -86,30 +96,4 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 	}
 
 	return len;
-}
-
-std::string VarToString( const std::string & var, const int & lineinfile )
-{
-	auto dt = DataType::GetDataType( var );
-	if( dt == DataType::LITERAL ) {
-		std::string res = var;
-
-		res.erase( res.begin() );
-		res.erase( res.end() - 1 );
-
-		return res;
-	}
-	if( dt != DataType::STRING )
-		return var;
-
-	auto v = Vars::GetSingleton( "global" );
-	auto fv = Vars::GetSingleton( GetCurrentFunction() );
-
-	if( fv != nullptr && fv->GetVar( var ).data.size() > 0 )
-		return fv->GetVar( var ).data;
-	else if( v != nullptr && v->GetVar( var ).data.size() > 0 )
-		return v->GetVar( var ).data;
-
-	std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << "!" << std::endl;
-	return "__E_R_R_O_R__";
 }

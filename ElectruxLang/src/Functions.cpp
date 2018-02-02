@@ -13,12 +13,12 @@
 
 Function::Function()
 {
+	argscount = 0;
 }
 
 Function::~Function()
 {
 	Vars::DelSingleton( "fn_" + name );
-	args = nullptr;
 }
 
 Function * Function::GetSingleton( const std::string & fnname )
@@ -28,8 +28,6 @@ Function * Function::GetSingleton( const std::string & fnname )
 
 	allfuncs[ fnname ] = new Function;
 	allfuncs[ fnname ]->name = fnname;
-
-	allfuncs[ fnname ]->args = Vars::GetSingleton( "fn_" + fnname );
 
 	return allfuncs[ fnname ];
 }
@@ -53,15 +51,22 @@ ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Dat
 	// Create function instance using the function name.
 	auto fn = GetSingleton( alldata[ startline ][ 2 ].word );
 
-	int args = GetArgCount( alldata[ startline ] );
+	// Handle arguments.
+	std::vector< DataType::Data > argnames;
+	fn->argscount = GetArgs( alldata[ startline ], argnames );
 
-	//SetArgs
-
-	if( args == -1 ) {
+	if( fn->argscount == -1 ) {
 		std::cerr << "Error in function definition parenthesis syntax at line: " << currentfileline << "!" << std::endl;
 		return SYNTAX_ERROR;
 	}
 
+	auto v = Vars::GetSingleton( "fn_" + fn->name );
+	for( int i = 0; i < fn->argscount; ++i ) {
+		if( argnames[ i ].type == DataType::IDENTIFIER )
+			v->AddVar( std::to_string( i ), { Vars::STRING, argnames[ i ].word } );
+	}
+
+	// Add the function lines in the function itself.
 	int i = startline + 1;
 	while( i < alldata.size() && alldata[ i ][ 0 ].indent > indent ) {
 		fn->lines.push_back( alldata[ i ] );
@@ -78,13 +83,37 @@ ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Dat
 	return SUCCESS;
 }
 
-ErrorTypes Function::ExecuteFunction()
+ErrorTypes Function::ExecuteFunction( const std::vector< DataType::Data > & argnames, const int & fileline )
 {
 	ErrorTypes err = SUCCESS;
 
+	if( argnames.size() < this->argscount ) {
+		std::cerr << "Error at line: " << fileline << ": Too low argument count in function call! Expected: "
+			<< this->argscount << ", found: " << argnames.size() << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	if( argnames.size() > this->argscount ) {
+		std::cerr << "Error at line: " << fileline << ": Too many argument count in function call! Expected: "
+			<< this->argscount << ", found: " << argnames.size() << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	auto v = Vars::GetSingleton( "fn_" + this->name );
+	for( int i = 0; i < this->argscount; ++i ) {
+		auto var = FetchVariable( argnames[ i ].word, fileline );
+		if( var.data == "__E_R_R_O_R__" )
+			return ENTITY_NOT_FOUND;
+
+		v->AddVar( v->GetVar( std::to_string( i ) ).data, var );
+	}
+
 	SetCurrentFunction( "fn_" + name );
-	if( ( err = ExecuteAll( lines ) ) != SUCCESS )
+
+	if( ( err = ExecuteAll( this->lines ) ) != SUCCESS ) {
+		RemoveLastFunction();
 		return err;
+	}
 
 	RemoveLastFunction();
 	return err;
@@ -95,28 +124,53 @@ bool Function::DelSingleton( const std::string & fnname )
 	if( allfuncs.find( fnname ) == allfuncs.end() )
 		return false;
 
-	delete allfuncs[ fnname ];
+	if( allfuncs[ fnname ] != nullptr )
+		delete allfuncs[ fnname ];
 	allfuncs.erase( fnname );
+
+	Vars::DelSingleton( "fn_" + fnname );
 
 	return true;
 }
 
-int GetArgCount( const std::vector< DataType::Data > & dataline )
+void Function::DelAllFuncs()
+{
+	for( auto it = allfuncs.begin(); it != allfuncs.end(); ) {
+		if( it->second != nullptr )
+			delete it->second;
+		it = allfuncs.erase( it );
+	}
+}
+
+int Function::GetArgs( const std::vector< DataType::Data > & dataline, std::vector< DataType::Data > & argnames )
 {
 	int i = 0;
 
-	int bracketopenloc = -1, bracketcloseloc = -1, commacount = 0;
+	int bracketopenloc = -1, bracketcloseloc = -1;
+
+	argnames.clear();
 
 	// Locations of brackets, and count of commas.
 	for( auto data : dataline ) {
-		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISOPEN )
+		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISOPEN ) {
 			bracketopenloc = i;
-		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISCLOSE )
+			++i;
+			continue;
+		}
+		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISCLOSE ) {
 			bracketcloseloc = i;
+			++i;
+			continue;
+		}
 
-		if( bracketopenloc != -1 && bracketcloseloc == -1 &&
-			data.type == DataType::SEPARATOR && data.detailtype == DataType::COMMA )
-			++commacount;
+		if( bracketopenloc != -1 && bracketcloseloc == -1 ) {
+			if( data.type == DataType::SEPARATOR && data.detailtype == DataType::COMMA ) {
+				// Perhaps something in the future.
+			}
+			else {
+				argnames.push_back( data );
+			}
+		}
 		++i;
 	}
 
@@ -127,5 +181,5 @@ int GetArgCount( const std::vector< DataType::Data > & dataline )
 	if( bracketopenloc == bracketcloseloc - 1 )
 		return 0;
 	
-	return commacount == 0 ? 1 : commacount + 1;
+	return argnames.size();
 }

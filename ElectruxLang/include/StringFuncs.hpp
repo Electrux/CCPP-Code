@@ -16,4 +16,7 @@ template<> std::string VectorToString< std::string >( const std::vector< std::st
 template<> std::string VectorToString< int >( const std::vector< int > & vec );
 template<> std::string VectorToString< float >( const std::vector< float > & vec );
 
+void ReplaceInString( std::string & str, const std::string & from, const std::vector< std::string > & to );
+void ReplaceInString( std::string & str, const std::string & from, const std::string & to );
+
 #endif // STRINGFUNCS_HPP

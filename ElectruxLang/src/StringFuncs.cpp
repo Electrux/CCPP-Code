@@ -232,3 +232,20 @@ template <> std::string VectorToString< float >( const std::vector< float > & ve
 
 	return temp;
 }
+
+void ReplaceInString( std::string & str, const std::string & from, const std::vector< std::string > & to )
+{
+	for( auto individualto : to )
+		ReplaceInString( str, from, individualto );
+}
+
+void ReplaceInString( std::string & str, const std::string & from, const std::string & to )
+{
+	size_t n = 0;
+
+	while( ( n = str.find( from, n ) ) != std::string::npos ) {
+		str.replace( n, from.size(), to );
+
+		n += to.size();
+	}
+}

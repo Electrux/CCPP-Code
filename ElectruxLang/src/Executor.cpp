@@ -15,6 +15,7 @@ static int currentline = 0;
 
 ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata )
 {
+	Vars::InitializeVars();
 	ErrorTypes err = ErrorTypes::SUCCESS;
 
 	for( int i = 0; i < alldata.size(); ++i ) {
@@ -23,6 +24,10 @@ ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alld
 
 		++currentline;
 	}
+
+	// Cleanup
+	Function::DelAllFuncs();
+	Vars::DelAllVars();
 
 	return SUCCESS;
 }
@@ -53,7 +58,9 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 				<< alldata[ line ][ 1 ].word << " exists!" << std::endl;
 			return ENTITY_NOT_FOUND;
 		}
-		func->ExecuteFunction();
+		std::vector< DataType::Data > argnames;
+		int argscount = Function::GetArgs( alldata[ line ], argnames );
+		func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
 	}
 
 	return SUCCESS;

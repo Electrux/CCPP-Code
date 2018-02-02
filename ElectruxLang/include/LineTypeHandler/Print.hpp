@@ -11,6 +11,4 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line );
 
 int SubstituteVars( std::string & str, const std::vector< std::string > & args, const int & lineinfile );
 
-std::string VarToString( const std::string & var, const int & lineinfile );
-
 #endif // PRINT_HPP

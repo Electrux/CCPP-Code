@@ -33,6 +33,7 @@ public:
 	void AddVars( const std::map< std::string, Variable > & vars );
 
 	void AddVar( const std::string & key, const Variable & val );
+	void AddVar( const std::string & key, const std::string & val );
 
 	Variable & GetVar( const std::string & key );
 
@@ -42,6 +43,10 @@ public:
 
 	bool VarExists( const std::string & key );
 
+	static void InitializeVars();
+
+	static void DelAllVars();
+
 	bool IsEmpty();
 };
 
@@ -50,5 +55,9 @@ struct Variable
 	Vars::VarType vartype;
 	std::string data;
 };
+
+Variable FetchVariable( const std::string & var, const int & lineinfile );
+
+std::string FetchVarToString( const std::string & var, const int & lineinfile );
 
 #endif // VARS_HPP

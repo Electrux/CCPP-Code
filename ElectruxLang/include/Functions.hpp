@@ -13,7 +13,7 @@ class Function
 {
 	std::string name;
 
-	Vars * args;
+	int argscount;
 
 	std::vector< std::vector< DataType::Data > > lines;
 
@@ -25,12 +25,14 @@ public:
 	static Function * GetSingleton( const std::string & fnname );
 
 	static ErrorTypes LoadFunction( const std::vector< std::vector< DataType::Data > > & alldata, int & startline );
-	ErrorTypes ExecuteFunction();
+	ErrorTypes ExecuteFunction( const std::vector< DataType::Data > & argnames, const int & fileline );
 
 	static bool DelSingleton( const std::string & fnname );
-};
 
-int GetArgCount( const std::vector< DataType::Data > & dataline );
+	static void DelAllFuncs();
+
+	static int GetArgs( const std::vector< DataType::Data > & dataline, std::vector< DataType::Data > & argnames );
+};
 
 static std::map< std::string, Function * > allfuncs;
 
