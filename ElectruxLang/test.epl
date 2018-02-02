@@ -1,5 +1,6 @@
-var test = 0 + 5 / 3 + 'hello'
+fn add( a b ) :
+	var c = a + b
+	print 'Addition of {0} and {1} = {2}' a b c
 
-fn func():
-	print 'hi {0}' var
-func()
+
+add( 1 2 )
