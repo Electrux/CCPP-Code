@@ -7,6 +7,7 @@
 #include "../include/Errors.hpp"
 #include "../include/DataTypes.hpp"
 #include "../include/GlobalData.hpp"
+#include "../include/StringFuncs.hpp"
 #include "../include/Stack.hpp"
 #include "../include/Vars.hpp"
 
@@ -175,7 +176,7 @@ std::string PerformOperation( const DataType::Data & op1, const DataType::Data &
 {
 	if( exprtype == DataType::STRING ) {
 		if( op.detailtype == DataType::ADD ) {
-			return op1.word + op2.word;
+			return RemoveTrailingQuotes( op1.word ) + RemoveTrailingQuotes( op2.word );
 		}
 		return "";
 	}

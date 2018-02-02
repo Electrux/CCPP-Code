@@ -19,4 +19,7 @@ template<> std::string VectorToString< float >( const std::vector< float > & vec
 void ReplaceInString( std::string & str, const std::string & from, const std::vector< std::string > & to );
 void ReplaceInString( std::string & str, const std::string & from, const std::string & to );
 
+void RemoveTrailingQuotes( std::string & str );
+std::string RemoveTrailingQuotes( const std::string & str );
+
 #endif // STRINGFUNCS_HPP

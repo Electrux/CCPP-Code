@@ -101,11 +101,16 @@ ErrorTypes Function::ExecuteFunction( const std::vector< DataType::Data > & argn
 
 	auto v = Vars::GetSingleton( "fn_" + this->name );
 	for( int i = 0; i < this->argscount; ++i ) {
-		auto var = FetchVariable( argnames[ i ].word, fileline );
-		if( var.data == "__E_R_R_O_R__" )
-			return ENTITY_NOT_FOUND;
+		if( argnames[ i ].type != DataType::LITERAL ) {
+			auto var = FetchVariable( argnames[ i ].word, fileline );
+			if( var.data == "__E_R_R_O_R__" )
+				return ENTITY_NOT_FOUND;
 
-		v->AddVar( v->GetVar( std::to_string( i ) ).data, var );
+			v->AddVar( v->GetVar( std::to_string( i ) ).data, var );
+		}
+		else {
+			v->AddVar( v->GetVar( std::to_string( i ) ).data, { Vars::STRING, argnames[ i ].word } );
+		}
 	}
 
 	SetCurrentFunction( "fn_" + name );
@@ -160,7 +165,7 @@ int Function::GetArgs( const std::vector< DataType::Data > & dataline, std::vect
 		if( data.type == DataType::SEPARATOR && data.detailtype == DataType::PARENTHESISCLOSE ) {
 			bracketcloseloc = i;
 			++i;
-			continue;
+			break;
 		}
 
 		if( bracketopenloc != -1 && bracketcloseloc == -1 ) {

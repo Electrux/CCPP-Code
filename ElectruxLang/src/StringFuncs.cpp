@@ -249,3 +249,24 @@ void ReplaceInString( std::string & str, const std::string & from, const std::st
 		n += to.size();
 	}
 }
+
+void RemoveTrailingQuotes( std::string & str )
+{
+	if( !str.empty() && ( * str.begin() == '\'' || * str.begin() == '\"' ) )
+		str.erase( str.begin() );
+
+	if( !str.empty() && ( * ( str.end() - 1 ) == '\'' || * ( str.end() - 1 ) == '\"' ) )
+		str.erase( str.end() - 1 );
+}
+
+std::string RemoveTrailingQuotes( const std::string & str )
+{
+	std::string tempstr = str;
+	if( !tempstr.empty() && ( * tempstr.begin() == '\'' || * tempstr.begin() == '\"' ) )
+		tempstr.erase( tempstr.begin() );
+
+	if( !tempstr.empty() && ( * ( tempstr.end() - 1 ) == '\'' || * ( tempstr.end() - 1 ) == '\"' ) )
+		tempstr.erase( tempstr.end() - 1 );
+	
+	return tempstr;
+}
