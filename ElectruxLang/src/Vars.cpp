@@ -105,6 +105,9 @@ void Vars::InitializeVars()
 
 	v->AddVar( "nl", { Vars::STRING, "\n" } );
 	v->AddVar( "ts", { Vars::STRING, "\t" } );
+
+	v->AddVar( "sq", { Vars::STRING, "\'" } );
+	v->AddVar( "dq", { Vars::STRING, "\"" } );
 }
 
 void Vars::DelAllVars()
