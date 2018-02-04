@@ -1,6 +1,22 @@
 fn add( a b ) :
-	var c = a + b
-	print 'Addition of {0} and {1} = {2}' a b c
+	ret a + b
 
+fn sub( a b ) :
+	ret a - b
 
-add( 1 2 )
+fn mult( a b ) :
+	ret a * b
+
+fn div( a b ) :
+	ret a / b
+
+fn mod( a b ) :
+	ret a % b
+
+var a = add( 1 5 )
+var b = sub( 1 5 )
+var c = mult( 1 5 )
+var d = div( 1 5 )
+var e = mod( 1 5 )
+
+print '{0} {1} {2} {3} {4} {5}' a b c d e

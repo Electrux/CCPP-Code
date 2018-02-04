@@ -121,6 +121,21 @@ ErrorTypes Function::ExecuteFunction( const std::vector< DataType::Data > & argn
 	}
 
 	RemoveLastFunction();
+
+	Variable returnvar = GetCurrentReturnValue();
+
+	if( returnvar.vartype != Vars::INVALID ) {
+		std::string space = GetCurrentFunction();
+
+		if( space.empty() )
+			space = "global";
+		
+		auto v = Vars::GetSingleton( space );
+		v->AddVar( "fn_ret_" + this->name, returnvar );
+
+		RemoveLastReturnValue();
+	}
+
 	return err;
 }
 

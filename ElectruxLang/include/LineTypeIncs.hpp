@@ -3,5 +3,6 @@
 
 #include "LineTypeHandler/Print.hpp"
 #include "LineTypeHandler/Var.hpp"
+#include "LineTypeHandler/Return.hpp"
 
 #endif // LINETYPEINCS_HPP

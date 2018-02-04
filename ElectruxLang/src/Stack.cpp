@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../include/DataTypes.hpp"
+#include "../include/Vars.hpp"
 
 #include "../include/Stack.hpp"
 
@@ -49,3 +50,4 @@ template< class T > size_t Stack< T >::Size()
 
 template class Stack< DataType::Data >;
 template class Stack< std::string >;
+template class Stack< Variable >;

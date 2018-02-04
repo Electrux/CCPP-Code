@@ -11,8 +11,6 @@
 
 #include "../include/Executor.hpp"
 
-static int currentline = 0;
-
 ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alldata )
 {
 	ErrorTypes err = ErrorTypes::SUCCESS;
@@ -20,8 +18,6 @@ ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alld
 	for( int i = 0; i < alldata.size(); ++i ) {
 		if( ( err = ExecuteStatement( alldata, i ) ) != SUCCESS )
 			return err;
-
-		++currentline;
 	}
 
 	return SUCCESS;
@@ -56,6 +52,10 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 		std::vector< DataType::Data > argnames;
 		int argscount = Function::GetArgs( alldata[ line ], argnames );
 		func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
+	}
+	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::RETURN ) {
+		err = ExecuteReturn( alldata[ line ] );
+		return err;
 	}
 
 	return SUCCESS;
