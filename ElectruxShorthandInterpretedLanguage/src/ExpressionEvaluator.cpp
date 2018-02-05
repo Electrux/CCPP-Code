@@ -228,8 +228,6 @@ std::string PerformOperation( const DataType::Data & op1, const DataType::Data &
 
 bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 {
-	auto v = Vars::GetSingleton( "global" );
-	auto fv = Vars::GetSingleton( GetCurrentFunction() );
 	for( auto & data : postfixexpr ) {
 		if( data.type == DataType::IDENTIFIER ) {
 			std::string res = FetchVarToString( data.word, data.fileline );

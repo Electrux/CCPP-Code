@@ -18,7 +18,7 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 
 	std::string resultstring = FetchVarToString( line[ 2 ].word, lineinfile );
 
-	for( int i = 3; i < line.size(); ++i ) {
+	for( int i = 3; i < ( int )line.size(); ++i ) {
 		if( line[ i ].type != DataType::OPERATOR && line[ i ].type != DataType::LOGICAL &&
 			line[ i ].type != DataType::SEPARATOR && line[ i ].type != DataType::KEYWORD &&
 			line[ i ].type != DataType::INVALID )
@@ -68,7 +68,7 @@ int SubstituteVars( std::string & str, const std::vector< std::string > & args, 
 			it = str.erase( it );
 
 			if( StringToInteger( var, temp ) ) {
-				if( args.size() > temp ) {
+				if( ( int )args.size() > temp ) {
 					std::string res = FetchVarToString( args[ temp ], lineinfile );
 
 					RemoveTrailingQuotes( res );

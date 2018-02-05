@@ -68,7 +68,7 @@ ErrorTypes Function::LoadFunction( const std::vector< std::vector< DataType::Dat
 
 	// Add the function lines in the function itself.
 	int i = startline + 1;
-	while( i < alldata.size() && alldata[ i ][ 0 ].indent > indent ) {
+	while( i < ( int )alldata.size() && alldata[ i ][ 0 ].indent > indent ) {
 		fn->lines.push_back( alldata[ i ] );
 		++i;
 	}
@@ -87,13 +87,13 @@ ErrorTypes Function::ExecuteFunction( const std::vector< DataType::Data > & argn
 {
 	ErrorTypes err = SUCCESS;
 
-	if( argnames.size() < this->argscount ) {
+	if( ( int )argnames.size() < this->argscount ) {
 		std::cerr << "Error at line: " << fileline << ": Too low argument count in function call! Expected: "
 			<< this->argscount << ", found: " << argnames.size() << std::endl;
 		return SYNTAX_ERROR;
 	}
 
-	if( argnames.size() > this->argscount ) {
+	if( ( int )argnames.size() > this->argscount ) {
 		std::cerr << "Error at line: " << fileline << ": Too many argument count in function call! Expected: "
 			<< this->argscount << ", found: " << argnames.size() << std::endl;
 		return SYNTAX_ERROR;

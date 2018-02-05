@@ -196,9 +196,9 @@ template <> std::string VectorToString< std::string >( const std::vector< std::s
 {
 	std::string temp;
 	temp += "[ ";
-	for( int i = 0; i < vec.size(); ++i ) {
+	for( int i = 0; i < ( int )vec.size(); ++i ) {
 		temp += "\'" + vec[ i ] + "\'";
-		if( i != vec.size() - 1 )
+		if( i != ( int )vec.size() - 1 )
 			temp += ", ";
 	}
 	temp += " ]";
@@ -210,9 +210,9 @@ template <> std::string VectorToString< int >( const std::vector< int > & vec )
 {
 	std::string temp;
 	temp += "[ ";
-	for( int i = 0; i < vec.size(); ++i ) {
+	for( int i = 0; i < ( int )vec.size(); ++i ) {
 		temp +=  "\'" + std::to_string( vec[ i ] ) + "\'";
-		if( i != vec.size() - 1 )
+		if( i != ( int )vec.size() - 1 )
 			temp += ", ";
 	}
 	temp += " ]";
@@ -224,9 +224,9 @@ template <> std::string VectorToString< float >( const std::vector< float > & ve
 {
 	std::string temp;
 	temp += "[ ";
-	for( int i = 0; i < vec.size(); ++i ) {
+	for( int i = 0; i < ( int )vec.size(); ++i ) {
 		temp +=  "\'" + std::to_string( vec[ i ] ) + "\'";
-		if( i != vec.size() - 1 )
+		if( i != ( int )vec.size() - 1 )
 			temp += ", ";
 	}
 	temp += " ]";

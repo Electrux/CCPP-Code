@@ -36,7 +36,7 @@ int main( int argc, char ** argv )
 
 	std::cout << "\n\nExecuting...\n\n";
 
-	Vars::InitializeVars();
+	Vars::InitializeVars( argc, ( const char ** )argv );
 
 	ExecuteAll( alldata );
 

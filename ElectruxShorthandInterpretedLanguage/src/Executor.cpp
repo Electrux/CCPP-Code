@@ -15,7 +15,7 @@ ErrorTypes ExecuteAll( const std::vector< std::vector< DataType::Data > > & alld
 {
 	ErrorTypes err = ErrorTypes::SUCCESS;
 
-	for( int i = 0; i < alldata.size(); ++i ) {
+	for( int i = 0; i < ( int )alldata.size(); ++i ) {
 		if( ( err = ExecuteStatement( alldata, i ) ) != SUCCESS )
 			return err;
 	}
@@ -50,7 +50,7 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 			return ENTITY_NOT_FOUND;
 		}
 		std::vector< DataType::Data > argnames;
-		int argscount = Function::GetArgs( alldata[ line ], argnames );
+		Function::GetArgs( alldata[ line ], argnames );
 		func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
 	}
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::RETURN ) {
@@ -58,5 +58,5 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 		return err;
 	}
 
-	return SUCCESS;
+	return err;
 }

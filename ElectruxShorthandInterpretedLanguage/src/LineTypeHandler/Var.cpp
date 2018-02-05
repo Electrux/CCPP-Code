@@ -14,12 +14,18 @@
 
 ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & alldata, const int & line )
 {
-	auto currline = alldata[ line ];
+	auto & currline = alldata[ line ];
 
 	if( currline.size() < 5 || ( currline[ 2 ].type != DataType::IDENTIFIER ||
 					currline[ 3 ].detailtype != DataType::ASSIGN ) ) {
 		std::cerr << "Error: Syntax for declaring a variable is - var < name > = < value >\nError on line: "
-			<< line << std::endl;
+			<< currline[ 0 ].fileline << std::endl;
+		return SYNTAX_ERROR;
+	}
+
+	if( FetchVarToString( currline[ 2 ].word, currline[ 0 ].fileline, false ) != "__E_R_R_O_R__" ) {
+		std::cerr << "Error on line: " << currline[ 0 ].fileline << ": Variable already defined: " << currline[ 2 ].word
+			<< "!" << std::endl;
 		return SYNTAX_ERROR;
 	}
 
@@ -27,15 +33,15 @@ ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & allda
 	if( currline.size() >= 7 && currline[ 4 ].type == DataType::IDENTIFIER && currline[ 5 ].type == DataType::SEPARATOR &&
 		currline[ 5 ].detailtype == DataType::PARENTHESISOPEN ) {
 
-		auto func = Function::GetSingleton( alldata[ line ][ 4 ].word );
+		auto func = Function::GetSingleton( currline[ 4 ].word );
 		if( func == nullptr ) {
-			std::cerr << "Error on line: " << alldata[ line ][ 0 ].fileline << ": No function named: "
-				<< alldata[ line ][ 4 ].word << " exists!" << std::endl;
+			std::cerr << "Error on line: " << currline[ 0 ].fileline << ": No function named: "
+				<< currline[ 4 ].word << " exists!" << std::endl;
 			return ENTITY_NOT_FOUND;
 		}
 		std::vector< DataType::Data > argnames;
-		int argscount = Function::GetArgs( alldata[ line ], argnames );
-		func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
+		Function::GetArgs( currline, argnames );
+		func->ExecuteFunction( argnames, currline[ 0 ].fileline );
 
 		std::string space = GetCurrentFunction();
 		if( space.empty() )
@@ -60,7 +66,7 @@ ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & allda
 	// Now, evaluate the RHS expression.
 	Variable tempvar;
 
-	auto err = EvalExpression( alldata[ line ], 4, alldata[ line ].size() - 1, tempvar );
+	auto err = EvalExpression( currline, 4, currline.size() - 1, tempvar );
 	if( err != SUCCESS )
 		return err;
 

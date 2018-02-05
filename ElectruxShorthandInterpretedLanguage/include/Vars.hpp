@@ -43,7 +43,7 @@ public:
 
 	bool VarExists( const std::string & key );
 
-	static void InitializeVars();
+	static void InitializeVars( const int & argc, const char ** argv );
 
 	static void DelAllVars();
 
@@ -56,8 +56,8 @@ struct Variable
 	std::string data;
 };
 
-Variable FetchVariable( const std::string & var, const int & lineinfile );
+Variable FetchVariable( const std::string & var, const int & lineinfile, const int & show_error = true );
 
-std::string FetchVarToString( const std::string & var, const int & lineinfile );
+std::string FetchVarToString( const std::string & var, const int & lineinfile, const int & show_error = true );
 
 #endif // VARS_HPP

@@ -76,7 +76,7 @@ bool Vars::DelSingleton( const std::string & space )
 	return true;
 }
 
-void Vars::InitializeVars()
+void Vars::InitializeVars( const int & argc, const char ** argv )
 {
 	auto v = Vars::GetSingleton( "__self_vars__" );
 
@@ -108,6 +108,13 @@ void Vars::InitializeVars()
 
 	v->AddVar( "sq", { Vars::STRING, "\'" } );
 	v->AddVar( "dq", { Vars::STRING, "\"" } );
+
+	// For command line args.
+	auto gv = Vars::GetSingleton( "global" );
+	for( int i = 0; i < argc; ++i )
+		gv->AddVar( "argv" + std::to_string( i ), { Vars::STRING, argv[ i ] } );
+
+	gv->AddVar( "argc", { Vars::NUM, std::to_string( argc ) } );
 }
 
 void Vars::DelAllVars()
@@ -124,7 +131,7 @@ bool Vars::IsEmpty()
 	return vars.empty();
 }
 
-Variable FetchVariable( const std::string & var, const int & lineinfile )
+Variable FetchVariable( const std::string & var, const int & lineinfile, const int & show_error )
 {
 	auto dt = DataType::GetDataType( var );
 	if( dt == DataType::LITERAL ) {
@@ -150,11 +157,13 @@ Variable FetchVariable( const std::string & var, const int & lineinfile )
 	else if( v != nullptr && v->GetVar( var ).data.size() > 0 )
 		return v->GetVar( var );
 
-	std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << "!" << std::endl;
+	if( show_error )
+		std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << "!" << std::endl;
+
 	return { Vars::INVALID, "__E_R_R_O_R__" };
 }
 
-std::string FetchVarToString( const std::string & var, const int & lineinfile )
+std::string FetchVarToString( const std::string & var, const int & lineinfile, const int & show_error )
 {
-	return FetchVariable( var, lineinfile ).data;
+	return FetchVariable( var, lineinfile, show_error ).data;
 }
