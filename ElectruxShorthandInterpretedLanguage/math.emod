@@ -1,0 +1,14 @@
+fn add( a b ) :
+	ret a + b
+
+fn sub( a b ) :
+	ret a - b
+
+fn mult( a b ) :
+	ret a * b
+
+fn div( a b ) :
+	ret a / b
+
+fn mod( a b ) :
+	ret a % b

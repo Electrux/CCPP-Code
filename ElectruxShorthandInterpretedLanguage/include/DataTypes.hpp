@@ -28,6 +28,7 @@ namespace DataType
 		VAR,
 
 		FN,
+		LOAD,
 
 		IF,
 		ELSEIF,

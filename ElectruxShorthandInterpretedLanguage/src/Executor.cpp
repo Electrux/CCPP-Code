@@ -56,6 +56,9 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::RETURN ) {
 		err = ExecuteReturn( alldata[ line ] );
 	}
+	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::LOAD ) {
+		err = LoadModule( alldata[ line ] );
+	}
 
 	return err;
 }

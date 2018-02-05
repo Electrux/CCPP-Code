@@ -27,6 +27,7 @@ namespace DataType
 		"var",
 
 		"fn",
+		"ld",
 
 		"if",
 		"elseif",

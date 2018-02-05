@@ -34,6 +34,8 @@ int main( int argc, char ** argv )
 		++fileline;
 	}
 
+	file.close();
+
 	std::cout << "\n\nExecuting...\n\n";
 
 	Vars::InitializeVars( argc, ( const char ** )argv );

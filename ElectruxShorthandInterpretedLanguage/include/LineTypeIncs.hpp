@@ -5,5 +5,6 @@
 #include "LineTypeHandler/Input.hpp"
 #include "LineTypeHandler/Var.hpp"
 #include "LineTypeHandler/Return.hpp"
+#include "LineTypeHandler/ModuleLoader.hpp"
 
 #endif // LINETYPEINCS_HPP
