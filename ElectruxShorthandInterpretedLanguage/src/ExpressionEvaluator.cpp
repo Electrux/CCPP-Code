@@ -60,6 +60,36 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 			return INVALID_EXPRESSION;
 		}
 
+		if( dataline[ i ].type == DataType::SEPARATOR && dataline[ i ].detailtype == DataType::CURLYBRACESOPEN ) {
+
+			if( i + 1 >= dataline.size() ) {
+				std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": No index specified for variable: "
+					<< postfix[ postfix.size() - 1 ].word << " after the curly braces opening!" << std::endl;
+				return SYNTAX_ERROR;
+			}
+
+			int j = i + 1;
+			while( j < ( int )dataline.size() && ( dataline[ i ].type != DataType::SEPARATOR ||
+				dataline[ i ].detailtype != DataType::CURLYBRACESCLOSE ) ) {
+				++j;
+			}
+
+			Variable var;
+			auto err = EvalExpression( dataline, i + 1, j, var );
+			if( err != SUCCESS )
+				return err;
+
+			if( var.vartype != Vars::NUM ) {
+				std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": Index must be a number!" << std::endl;
+				return SYNTAX_ERROR;
+			}
+
+			postfix[ postfix.size() - 1 ].word += var.data;
+			i += j - i;
+
+			continue;
+		}
+
 		if( IsSymbol( dataline[ i ].word ) ) {
 			if( dataline[ i ].word == "(" ) {
 				opstack.Push( dataline[ i ] );
@@ -230,6 +260,7 @@ bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 {
 	bool found_index = false;
 
+	int ctr = 0;
 	for( auto datait = postfixexpr.begin(); datait != postfixexpr.end(); ++datait ) {
 
 		// Move after the closing of curly bracket.
@@ -242,33 +273,14 @@ bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 
 		if( datait->type == DataType::IDENTIFIER ) {
 
-			std::string index = "-1";
-			if( datait != postfixexpr.end() - 1 && ( datait + 1 )->type == DataType::SEPARATOR &&
-				( datait + 1 )->detailtype == DataType::CURLYBRACESOPEN ) {
-
-				if( datait + 2 == postfixexpr.end() ) {
-					std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": No index specified for variable: "
-						<< datait->word << " after the curly braces opening!" << std::endl;
-					return false;
-				}
-
-				Variable var = FetchVariable( ( datait + 2 )->word, postfixexpr[ 0 ].fileline );
-				if( var.vartype != Vars::NUM ) {
-					std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": Index must be a number!" << std::endl;
-					return false;
-				}
-
-				index = var.data;
-				found_index = true;
-			}
-
-			std::string res = FetchVarToString( datait->word, datait->fileline, index );
+			std::string res = FetchVarToString( datait->word, datait->fileline );
 			if( res == "__E_R_R_O_R__" ) {
 				return false;
 			}
 			else {
 				datait->type = DataType::GetDataType( res );
 				datait->word = res;
+				++ctr;
 
 				continue;
 			}
@@ -278,6 +290,7 @@ bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 			datait->word.erase( datait->word.begin() );
 			datait->word.erase( datait->word.end() - 1 );
 		}
+		++ctr;
 	}
 
 	return true;

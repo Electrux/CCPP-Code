@@ -18,21 +18,15 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 
 	std::string resultstring = FetchVarToString( line[ 2 ].word, lineinfile );
 
-	bool found_index = false;
 	std::string index;
 	for( int i = 3; i < ( int )line.size(); ++i ) {
 		index = "-1";
-		if( found_index ) {
-			i += 3;
-			found_index = false;
-			if( i == ( int )line.size() )
-				break;
-		}
 
 		if( line[ i ].type != DataType::OPERATOR && line[ i ].type != DataType::LOGICAL &&
 			line[ i ].type != DataType::SEPARATOR && line[ i ].type != DataType::KEYWORD &&
 			line[ i ].type != DataType::INVALID ) {
 
+			std::string arg = line[ i ].word;
 			if( i != line.size() - 1 && line[ i + 1 ].type == DataType::SEPARATOR &&
 				line[ i + 1 ].detailtype == DataType::CURLYBRACESOPEN ) {
 
@@ -49,11 +43,15 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 				}
 
 				index = var.data;
-				found_index = true;
-
+				int j = i + 1;
+				while( j < ( int )line.size() && ( line[ j ].type != DataType::SEPARATOR ||
+					line[ j ].detailtype != DataType::CURLYBRACESCLOSE ) ) {
+					++j;
+				}
+				arg += index == "-1" ? "" : "{" + index + "}";
+				i += j - i;
 			}
 
-			std::string arg = index == "-1" ? line[ i ].word : line[ i ].word + "{" + index + "}";
 			args.push_back( arg );
 		}
 		else {
