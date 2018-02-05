@@ -228,23 +228,55 @@ std::string PerformOperation( const DataType::Data & op1, const DataType::Data &
 
 bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 {
-	for( auto & data : postfixexpr ) {
-		if( data.type == DataType::IDENTIFIER ) {
-			std::string res = FetchVarToString( data.word, data.fileline );
+	bool found_index = false;
+
+	for( auto datait = postfixexpr.begin(); datait != postfixexpr.end(); ++datait ) {
+
+		// Move after the closing of curly bracket.
+		if( found_index == true ) {
+			datait += 3;
+			found_index = false;
+			if( datait == postfixexpr.end() )
+				break;
+		}
+
+		if( datait->type == DataType::IDENTIFIER ) {
+
+			std::string index = "-1";
+			if( datait != postfixexpr.end() - 1 && ( datait + 1 )->type == DataType::SEPARATOR &&
+				( datait + 1 )->detailtype == DataType::CURLYBRACESOPEN ) {
+
+				if( datait + 2 == postfixexpr.end() ) {
+					std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": No index specified for variable: "
+						<< datait->word << " after the curly braces opening!" << std::endl;
+					return false;
+				}
+
+				Variable var = FetchVariable( ( datait + 2 )->word, postfixexpr[ 0 ].fileline );
+				if( var.vartype != Vars::NUM ) {
+					std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": Index must be a number!" << std::endl;
+					return false;
+				}
+
+				index = var.data;
+				found_index = true;
+			}
+
+			std::string res = FetchVarToString( datait->word, datait->fileline, index );
 			if( res == "__E_R_R_O_R__" ) {
 				return false;
 			}
 			else {
-				data.type = DataType::GetDataType( res );
-				data.word = res;
+				datait->type = DataType::GetDataType( res );
+				datait->word = res;
 
 				continue;
 			}
 		}
 
-		if( data.type == DataType::LITERAL ) {
-			data.word.erase( data.word.begin() );
-			data.word.erase( data.word.end() - 1 );
+		if( datait->type == DataType::LITERAL ) {
+			datait->word.erase( datait->word.begin() );
+			datait->word.erase( datait->word.end() - 1 );
 		}
 	}
 
@@ -256,7 +288,9 @@ bool IsValidDataType( const DataType::Data & data )
 	if( data.type == DataType::NUM || data.type == DataType::FLOAT || data.type == DataType::IDENTIFIER ||
 		data.type == DataType::OPERATOR || data.type == DataType::LITERAL ||
 		( data.type == DataType::SEPARATOR &&
-			( data.detailtype == DataType::PARENTHESISOPEN || data.detailtype == DataType::PARENTHESISCLOSE ) ) )
+			( data.detailtype == DataType::PARENTHESISOPEN || data.detailtype == DataType::PARENTHESISCLOSE ) ) ||
+		( data.type == DataType::SEPARATOR &&
+			( data.detailtype == DataType::CURLYBRACESOPEN || data.detailtype == DataType::CURLYBRACESCLOSE ) ) )
 		return true;
 	return false;
 }

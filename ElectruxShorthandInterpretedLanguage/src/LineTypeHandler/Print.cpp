@@ -18,11 +18,44 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 
 	std::string resultstring = FetchVarToString( line[ 2 ].word, lineinfile );
 
+	bool found_index = false;
+	std::string index;
 	for( int i = 3; i < ( int )line.size(); ++i ) {
+		index = "-1";
+		if( found_index ) {
+			i += 3;
+			found_index = false;
+			if( i == ( int )line.size() )
+				break;
+		}
+
 		if( line[ i ].type != DataType::OPERATOR && line[ i ].type != DataType::LOGICAL &&
 			line[ i ].type != DataType::SEPARATOR && line[ i ].type != DataType::KEYWORD &&
-			line[ i ].type != DataType::INVALID )
-			args.push_back( line[ i ].word );
+			line[ i ].type != DataType::INVALID ) {
+
+			if( i != line.size() - 1 && line[ i + 1 ].type == DataType::SEPARATOR &&
+				line[ i + 1 ].detailtype == DataType::CURLYBRACESOPEN ) {
+
+				if( i + 2 == line.size() ) {
+					std::cerr << "Error on line: " << lineinfile << ": No index specified for variable: "
+						<< line[ i ].word << " after the curly braces opening!" << std::endl;
+					return SYNTAX_ERROR;
+				}
+
+				Variable var = FetchVariable( line[ i + 2 ].word, lineinfile );
+				if( var.vartype != Vars::NUM ) {
+					std::cerr << "Error on line: " << lineinfile << ": Index must be a number!" << std::endl;
+					return SYNTAX_ERROR;
+				}
+
+				index = var.data;
+				found_index = true;
+
+			}
+
+			std::string arg = index == "-1" ? line[ i ].word : line[ i ].word + "{" + index + "}";
+			args.push_back( arg );
+		}
 		else {
 			std::cerr << "Error at line: " << lineinfile << "! Attempted to use illegal element as argument to "
 				<< "print statement: " << line[ i ].word << "!" << std::endl;

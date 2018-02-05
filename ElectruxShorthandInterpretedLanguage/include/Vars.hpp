@@ -56,8 +56,8 @@ struct Variable
 	std::string data;
 };
 
-Variable FetchVariable( const std::string & var, const int & lineinfile, const int & show_error = true );
+Variable FetchVariable( const std::string & var, const int & lineinfile, const std::string & index = "-1", const int & show_error = true );
 
-std::string FetchVarToString( const std::string & var, const int & lineinfile, const int & show_error = true );
+std::string FetchVarToString( const std::string & var, const int & lineinfile, const std::string & index = "-1", const int & show_error = true );
 
 #endif // VARS_HPP

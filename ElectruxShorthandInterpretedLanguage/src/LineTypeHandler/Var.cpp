@@ -23,7 +23,7 @@ ErrorTypes HandleVar( const std::vector< std::vector< DataType::Data > > & allda
 		return SYNTAX_ERROR;
 	}
 
-	if( FetchVarToString( currline[ 2 ].word, currline[ 0 ].fileline, false ) != "__E_R_R_O_R__" ) {
+	if( FetchVarToString( currline[ 2 ].word, currline[ 0 ].fileline, "-1", false ) != "__E_R_R_O_R__" ) {
 		std::cerr << "Error on line: " << currline[ 0 ].fileline << ": Variable already defined: " << currline[ 2 ].word
 			<< "!" << std::endl;
 		return SYNTAX_ERROR;

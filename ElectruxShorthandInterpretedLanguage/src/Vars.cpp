@@ -4,6 +4,7 @@
 
 #include "../include/DataTypes.hpp"
 #include "../include/GlobalData.hpp"
+#include "../include/StringFuncs.hpp"
 
 #include "../include/Vars.hpp"
 
@@ -131,7 +132,7 @@ bool Vars::IsEmpty()
 	return vars.empty();
 }
 
-Variable FetchVariable( const std::string & var, const int & lineinfile, const int & show_error )
+Variable FetchVariable( const std::string & var, const int & lineinfile, const std::string & index, const int & show_error )
 {
 	auto dt = DataType::GetDataType( var );
 	if( dt == DataType::LITERAL ) {
@@ -152,18 +153,25 @@ Variable FetchVariable( const std::string & var, const int & lineinfile, const i
 	auto v = Vars::GetSingleton( "global" );
 	auto fv = Vars::GetSingleton( GetCurrentFunction() );
 
-	if( fv != nullptr && fv->GetVar( var ).data.size() > 0 )
-		return fv->GetVar( var );
-	else if( v != nullptr && v->GetVar( var ).data.size() > 0 )
-		return v->GetVar( var );
+	std::string retvar = ( index == "-1" ) ? var : var + index;
 
-	if( show_error )
-		std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << "!" << std::endl;
+	ReplaceInString( retvar, "{", "" );
+	ReplaceInString( retvar, "}", "" );
+
+	if( fv != nullptr && fv->GetVar( retvar ).data.size() > 0 )
+		return fv->GetVar( retvar );
+	else if( v != nullptr && v->GetVar( retvar ).data.size() > 0 )
+		return v->GetVar( retvar );
+
+	if( show_error ) {
+		std::string tempstr = index == "-1" ? "" : "{" + index + "}";
+		std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << tempstr << "!" << std::endl;
+	}
 
 	return { Vars::INVALID, "__E_R_R_O_R__" };
 }
 
-std::string FetchVarToString( const std::string & var, const int & lineinfile, const int & show_error )
+std::string FetchVarToString( const std::string & var, const int & lineinfile, const std::string & index, const int & show_error )
 {
-	return FetchVariable( var, lineinfile, show_error ).data;
+	return FetchVariable( var, lineinfile, index, show_error ).data;
 }
