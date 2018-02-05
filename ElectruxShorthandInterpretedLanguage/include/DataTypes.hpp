@@ -26,21 +26,18 @@ namespace DataType
 	enum Keywords
 	{
 		VAR,
-		VECVAR,
 
 		FN,
 
 		IF,
 		ELSEIF,
 		ELSE,
-		FI,
 
 		FOR,
 		DOUBLEDOT,
 		IN,
 		BREAK,
 		CONTINUE,
-		ENDFOR,
 
 		PRINT,
 		SCAN,

@@ -22,10 +22,10 @@ ErrorTypes ExecuteReturn( const std::vector< DataType::Data > & dataline )
 	}
 
 	// a simple return statement.
-	if( dataline.size() == 3 ) {
+	/*if( dataline.size() == 3 ) {
 		SetCurrentReturnValue( FetchVariable( dataline[ 2 ].word, dataline[ 2 ].fileline ) );
 		return SUCCESS;
-	}
+	}*/
 
 	Variable tempres;
 	auto err = EvalExpression( dataline, 2, dataline.size() - 1, tempres );

@@ -10,6 +10,7 @@
 #include "../include/StringFuncs.hpp"
 #include "../include/Stack.hpp"
 #include "../include/Vars.hpp"
+#include "../include/LineTypeIncs.hpp"
 
 #include "../include/ExpressionEvaluator.hpp"
 
@@ -54,6 +55,21 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 	Stack< DataType::Data > opstack;
 
 	for( int i = from; i <= to; ++i ) {
+
+		if( dataline[ i ].type == DataType::KEYWORD && dataline[ i ].detailtype == DataType::SCAN ) {
+			DataType::Data var;
+			std::vector< DataType::Data > tempinput;
+			tempinput.push_back( dataline[ 0 ] );
+			tempinput.push_back( dataline[ i ] );
+
+			auto err = ExecuteInput( tempinput, var );
+			if( err != SUCCESS )
+				return err;
+
+			postfix.push_back( var );
+			continue;
+		}
+
 		if( !IsValidDataType( dataline[ i ] ) ) {
 			std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": Invalid element in expression: "
 				<< dataline[ i ].word << std::endl;
@@ -69,8 +85,8 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 			}
 
 			int j = i + 1;
-			while( j < ( int )dataline.size() && ( dataline[ i ].type != DataType::SEPARATOR ||
-				dataline[ i ].detailtype != DataType::CURLYBRACESCLOSE ) ) {
+			while( j < ( int )dataline.size() && ( dataline[ j ].type != DataType::SEPARATOR ||
+				dataline[ j ].detailtype != DataType::CURLYBRACESCLOSE ) ) {
 				++j;
 			}
 

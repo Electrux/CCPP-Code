@@ -7,6 +7,7 @@
 #include "../../include/GlobalData.hpp"
 #include "../../include/StringFuncs.hpp"
 #include "../../include/Vars.hpp"
+#include "../../include/ExpressionEvaluator.hpp"
 
 #include "../../include/LineTypeHandler/Print.hpp"
 
@@ -36,22 +37,25 @@ ErrorTypes ExecutePrint( const std::vector< DataType::Data > & line )
 					return SYNTAX_ERROR;
 				}
 
-				Variable var = FetchVariable( line[ i + 2 ].word, lineinfile );
-				if( var.vartype != Vars::NUM ) {
-					std::cerr << "Error on line: " << lineinfile << ": Index must be a number!" << std::endl;
-					return SYNTAX_ERROR;
-				}
-
-				index = var.data;
-				int j = i + 1;
+				int j = i + 2;
 				while( j < ( int )line.size() && ( line[ j ].type != DataType::SEPARATOR ||
 					line[ j ].detailtype != DataType::CURLYBRACESCLOSE ) ) {
 					++j;
 				}
-				arg += index == "-1" ? "" : "{" + index + "}";
+
+				Variable var;
+				auto err = EvalExpression( line, i + 2, j - 1, var );
+				if( err != SUCCESS )
+					return err;
+
+				if( var.vartype != Vars::NUM ) {
+					std::cerr << "Error on line: " << line[ 0 ].fileline << ": Index must be a number!" << std::endl;
+					return SYNTAX_ERROR;
+				}
+
+				arg += "{" + var.data + "}";
 				i += j - i;
 			}
-
 			args.push_back( arg );
 		}
 		else {

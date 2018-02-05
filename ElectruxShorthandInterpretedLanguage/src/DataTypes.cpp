@@ -25,24 +25,21 @@ namespace DataType
 	std::vector< std::string > KEYWORDS_STR = {
 
 		"var",
-		"vecvar",
 
 		"fn",
 
 		"if",
 		"elseif",
 		"else",
-		"fi",
 
 		"for",
 		"to",
 		"in",
 		"break",
 		"continue",
-		"rof",
 
 		"print",
-		"scan",
+		"fetch",
 
 		"ret",
 
