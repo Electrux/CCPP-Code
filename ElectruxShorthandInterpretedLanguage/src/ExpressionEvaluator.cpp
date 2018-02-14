@@ -70,6 +70,38 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 			continue;
 		}
 
+		if( dataline[ i ].type == DataType::KEYWORD && dataline[ i ].detailtype == DataType::GETENV ) {
+			DataType::Data var;
+			std::vector< DataType::Data > tempinput;
+			tempinput.push_back( dataline[ 0 ] );
+			tempinput.push_back( dataline[ i ] );
+			tempinput.push_back( dataline[ i + 1 ] );
+
+			auto err = ExecuteGetEnv( tempinput, var );
+			if( err != SUCCESS )
+				return err;
+
+			postfix.push_back( var );
+			++i;
+			continue;
+		}
+
+		if( dataline[ i ].type == DataType::KEYWORD && dataline[ i ].detailtype == DataType::SYSEXEC ) {
+			DataType::Data var;
+			std::vector< DataType::Data > tempinput;
+			tempinput.push_back( dataline[ 0 ] );
+			tempinput.push_back( dataline[ i ] );
+			tempinput.push_back( dataline[ i + 1 ] );
+
+			auto err = ExecuteExecCommand( tempinput, var );
+			if( err != SUCCESS )
+				return err;
+
+			postfix.push_back( var );
+			++i;
+			continue;
+		}
+
 		if( !IsValidDataType( dataline[ i ] ) ) {
 			std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": Invalid element in expression: "
 				<< dataline[ i ].word << std::endl;
@@ -190,8 +222,8 @@ std::string CalculatePostfixExpression( const std::vector< DataType::Data > & po
 	for( auto data : postfixexpr ) {
 		if( IsSymbol( data.word ) ) {
 			if( operands.Size() < 1 ) {
-				std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": Invalid expression!"
-					<< std::endl;
+				std::cerr << "Error on line: " << postfixexpr[ 0 ].fileline << ": Invalid expression at: "
+					<< data.word << std::endl;
 				return "";
 			}
 

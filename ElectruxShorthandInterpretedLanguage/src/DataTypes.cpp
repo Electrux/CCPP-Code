@@ -42,6 +42,11 @@ namespace DataType
 		"print",
 		"fetch",
 
+		// World commands - Interacting with environment.
+		"setenv",
+		"getenv",
+		"exec",
+
 		"ret",
 
 		"#",

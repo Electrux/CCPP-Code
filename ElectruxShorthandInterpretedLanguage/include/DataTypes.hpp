@@ -43,6 +43,11 @@ namespace DataType
 		PRINT,
 		SCAN,
 
+		// World commands - Interacting with environment.
+		SETENV,
+		GETENV,
+		SYSEXEC,
+
 		RETURN,
 
 		LINECOMMENT,
