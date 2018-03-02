@@ -45,43 +45,33 @@ int vector_str_push( struct StrVector * vec, const char * str )
 	if( strlen( str ) <= 0 )
 		return 0;
 
-	char ** newdata = ( char ** )malloc( sizeof( * newdata ) * ( vec->size + 1 ) );
+	if( vec->data == NULL )
+		vec->data = ( char ** )malloc( sizeof( * vec->data ) * 1 );
+	else
+		vec->data = ( char ** )realloc( vec->data, vec->size + 1 );
 
-	for( int i = 0; i < ( int )vec->size; ++i )
-		newdata[ i ] = vec->data[ i ];
+	vec->data[ vec->size ] = strdup( str );
 
-	newdata[ vec->size ] = strdup( str );
-
-	if( vec->data != NULL )
-		free( vec->data );
-
-	vec->data = newdata;
 	vec->size += 1;
 
 	return vec->size;
 }
 
-char * vector_str_pop( struct StrVector * vec, char * removed, const int removed_size )
+char * vector_str_pop( struct StrVector * vec, char * removed )
 {
 	if( vec->size <= 0 )
 		return NULL;
 
-	int len = strlen( vec->data[ vec->size - 1 ] );
-	// Increment by one to account for null terminator
-	len += 1;
-
-	if( removed_size > 0 && removed_size >= len && removed != NULL )
+	if( removed != NULL )
 		strcpy( removed, vec->data[ vec->size - 1 ] );
 
-	char ** newdata = ( char ** )malloc( sizeof( * newdata ) * ( vec->size - 1 ) );
-
-	for( int i = 0; i < ( int )vec->size - 1; ++i )
-		newdata[ i ] = vec->data[ i ];
-
 	free( vec->data[ vec->size - 1 ] );
-	free( vec->data );
 
-	vec->data = newdata;
+	if( vec->size - 1 > 0 )
+		vec->data = ( char ** )realloc( vec->data, vec->size - 1 );
+	else
+		free( vec->data );
+
 	vec->size -= 1;
 
 	return removed;

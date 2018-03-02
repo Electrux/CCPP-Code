@@ -37,45 +37,33 @@ int delete_int_vector( struct IntVector * vec )
 
 int vector_int_push( struct IntVector * vec, const int num )
 {
-	int * newdata = ( int * )malloc( sizeof( * newdata ) * ( vec->size + 1 ) );
+	if( vec->data == NULL )
+		vec->data = ( int * )malloc( sizeof( * vec->data ) * 1 );
+	else
+		vec->data = ( int * )realloc( vec->data, vec->size + 1 );
 
-	for( int i = 0; i < ( int )vec->size; ++i )
-		newdata[ i ] = vec->data[ i ];
+	vec->data[ vec->size ] = num;
 
-	newdata[ vec->size ] = num;
-
-	if( vec->data != NULL )
-		free( vec->data );
-
-	vec->data = newdata;
 	vec->size += 1;
 
 	return vec->size;
 }
 
-int vector_int_pop( struct IntVector * vec, int * removed )
+int vector_int_pop( struct IntVector * vec )
 {
 	if( vec->size <= 0 )
 		return -1;
 
-	if( removed != NULL )
-		* removed = vec->data[ vec->size - 1 ];
+	int retval = vec->data[ vec->size - 1 ];
 
-	int * newdata = ( int * )malloc( sizeof( * newdata ) * ( vec->size - 1 ) );
+	if( vec->size - 1 < 1 )
+		free( vec->data );
+	else
+		vec->data = ( int * )realloc( vec->data, vec->size - 1 );
 
-	for( int i = 0; i < ( int )vec->size - 1; ++i )
-		newdata[ i ] = vec->data[ i ];
-
-	// The if vec->data == NULL condition is not really needed due to the vec->size ( first ) condition.
-	free( vec->data );
-
-	vec->data = newdata;
 	vec->size -= 1;
 
-	if( removed != NULL )
-		return * removed;
-
-	return -1;
+	return retval;
 }
 
 int vector_int_get( const struct IntVector * vec, const int loc )
