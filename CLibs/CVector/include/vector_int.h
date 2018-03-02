@@ -28,7 +28,7 @@ int delete_int_vector( struct IntVector * vec )
 
 	int size = vec->size;
 
-	if( vec->data != NULL )
+	if( vec->size > 0 )
 		free( vec->data );
 	free( vec );
 
@@ -37,10 +37,7 @@ int delete_int_vector( struct IntVector * vec )
 
 int vector_int_push( struct IntVector * vec, const int num )
 {
-	if( vec->data == NULL )
-		vec->data = ( int * )malloc( sizeof( * vec->data ) * 1 );
-	else
-		vec->data = ( int * )realloc( vec->data, vec->size + 1 );
+	vec->data = ( int * )realloc( vec->data, ( vec->size + 1 ) * sizeof( * vec->data ) );
 
 	vec->data[ vec->size ] = num;
 

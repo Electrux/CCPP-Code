@@ -32,7 +32,7 @@ int delete_str_vector( struct StrVector * vec )
 	for( int i = 0; i < size; ++i )
 		free( vec->data[ i ] );
 
-	if( vec->data != NULL )
+	if( vec->size > 0 )
 		free( vec->data );
 
 	free( vec );
@@ -45,10 +45,7 @@ int vector_str_push( struct StrVector * vec, const char * str )
 	if( strlen( str ) <= 0 )
 		return 0;
 
-	if( vec->data == NULL )
-		vec->data = ( char ** )malloc( sizeof( * vec->data ) * 1 );
-	else
-		vec->data = ( char ** )realloc( vec->data, vec->size + 1 );
+	vec->data = ( char ** )realloc( vec->data, ( vec->size + 1 ) * sizeof( * vec->data ) );
 
 	vec->data[ vec->size ] = strdup( str );
 
