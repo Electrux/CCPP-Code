@@ -12,7 +12,7 @@ int main()
 
 	vector_str_print( myvec );
 	printf( "\n" );
-	vector_str_pop( myvec, NULL, 0 );
+	vector_str_pop( myvec, NULL );
 	vector_str_print( myvec );
 	printf( "\n" );
 
@@ -26,8 +26,8 @@ int main()
 	vector_int_print( myvec2 );
 	printf( "\n" );
 
-	vector_int_pop( myvec2, NULL );
-	vector_int_pop( myvec2, NULL );
+	vector_int_pop( myvec2 );
+	vector_int_pop( myvec2 );
 
 	vector_int_print( myvec2 );
 	printf( "\n" );
