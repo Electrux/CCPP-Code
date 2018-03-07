@@ -13,6 +13,7 @@ struct Data * alloc_data()
 
 	data->key = NULL;
 	data->val = NULL;
+	data->val_size = -1;
 
 	return data;
 }
@@ -60,7 +61,7 @@ int delete_vars( struct Vars * vars )
 	return 0;
 }
 
-int var_add( struct Vars * vars, const char * key, const char * val )
+int var_add( struct Vars * vars, const char * key, const void * val, size_t val_size )
 {
 	if( vars == NULL || key == NULL || val == NULL )
 		return -1;
@@ -81,7 +82,9 @@ int var_add( struct Vars * vars, const char * key, const char * val )
 	}
 
 	vars->end->key = strdup( key );
-	vars->end->val = strdup( val );
+	vars->end->val = ( void * ) malloc( val_size );
+	memcpy( vars->end->key, val, val_size );
+	vars->end->val_size = val_size;
 	vars->count += 1;
 
 	return vars->count;
@@ -105,7 +108,7 @@ struct Data * var_get_ptr( const struct Vars * vars, const char * key )
 }
 
 // uses strcpy because we don't want original value to be modified accidentally
-int var_get( const struct Vars * vars, const char * key, char * result )
+int var_get( const struct Vars * vars, const char * key, void * result )
 {
 	if( vars == NULL || key == NULL )
 		return -1;
@@ -115,7 +118,7 @@ int var_get( const struct Vars * vars, const char * key, char * result )
 		return 1;
 
 	if( result != NULL )
-		strcpy( result, data->val );
+		 memcpy( result, data->val, data->val_size );
 
 	return 0;
 }
@@ -143,21 +146,4 @@ int var_del( struct Vars * vars, const char * key )
 	vars->count -= 1;
 
 	return vars->count;
-}
-
-void vars_print( struct Vars * vars )
-{
-	if( vars == NULL )
-		return;
-
-	struct Data * iterator = vars->start;
-
-	printf( "[ " );
-	while( iterator != NULL ) {
-		printf( "%s : %s, ", iterator->key, iterator->val );
-		iterator = iterator->next;
-	}
-	if( vars->count > 0 )
-		printf( "\b\b " );
-	printf( " ]" );
 }
