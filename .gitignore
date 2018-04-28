@@ -1,7 +1,24 @@
+# Editor files #
+################
+.vscode/
+*.swp
+
+# TeX intermediate files #
+##########################
+*.out
+*.aux
+*.el
+
 # Build files #
 ###############
+bin/
+lib/
 build/
-.vscode/
+buildfiles/
+
+# Build file on BSD #
+#####################
+*.core
 
 # Compiled source #
 ###################

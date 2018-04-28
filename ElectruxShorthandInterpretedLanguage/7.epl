@@ -1,0 +1,5 @@
+ld math
+
+var sum = add( 1 2 )
+
+print 'Sum of 1 and 2 is: {0}' sum

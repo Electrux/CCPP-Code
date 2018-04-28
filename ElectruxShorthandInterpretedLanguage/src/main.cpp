@@ -15,7 +15,10 @@ int main( int argc, char ** argv )
 {
 	std::fstream file;
 
-	file.open( "./build/test.epl", std::ios::in );
+	if( argc < 2 )
+		file.open( "./test.epl", std::ios::in );
+	else
+		file.open( argv[ 1 ], std::ios::in );
 
 	std::string line;
 

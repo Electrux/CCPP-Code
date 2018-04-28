@@ -123,7 +123,7 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 			}
 
 			Variable var;
-			auto err = EvalExpression( dataline, i + 1, j, var );
+			auto err = EvalExpression( dataline, i + 1, j - 1, var );
 			if( err != SUCCESS )
 				return err;
 
@@ -134,7 +134,6 @@ ErrorTypes GenPostfix( const std::vector< DataType::Data > & dataline, const int
 
 			postfix[ postfix.size() - 1 ].word += var.data;
 			i += j - i;
-
 			continue;
 		}
 
@@ -320,7 +319,6 @@ bool SetAllVariableValues( std::vector< DataType::Data > & postfixexpr )
 		}
 
 		if( datait->type == DataType::IDENTIFIER ) {
-
 			std::string res = FetchVarToString( datait->word, datait->fileline );
 			if( res == "__E_R_R_O_R__" ) {
 				return false;

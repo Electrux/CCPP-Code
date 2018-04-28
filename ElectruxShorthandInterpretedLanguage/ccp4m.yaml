@@ -1,0 +1,17 @@
+name: Electrux Shorthand Interpreted Language
+version: 0.5.3
+lang: c++
+std: 14
+compile_flags: -O2
+license: bsd3
+author:
+  name: Electrux
+  email: ElectruxRedsworth@gmail.com
+builds:
+  - name: esil
+    type: bin
+    main_src: src/main.cpp
+    other_src:
+      - src/(.*).cpp
+    exclude:
+      - src/tests/(.*).cpp

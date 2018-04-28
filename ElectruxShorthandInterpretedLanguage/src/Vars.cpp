@@ -164,7 +164,7 @@ Variable FetchVariable( const std::string & var, const int & lineinfile, const s
 		return v->GetVar( retvar );
 
 	if( show_error ) {
-		std::string tempstr = index == "-1" ? "" : "{" + index + "}";
+		std::string tempstr = ( index == "-1" ) ? ( "" ) : ( "{" + index + "}" );
 		std::cerr << "Error at line: " << lineinfile << ": Undefined variable: " << var << tempstr << "!" << std::endl;
 	}
 

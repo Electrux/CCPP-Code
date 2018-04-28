@@ -1,0 +1,2 @@
+var sum = argv{2} + argv{3}
+print 'Sum of {0} and {1} is {2}' argv{2} argv{3} sum

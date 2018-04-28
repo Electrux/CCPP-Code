@@ -1,0 +1,3 @@
+setenv 'myvar' = 'myval'
+var env = getenv 'myvar'
+print env

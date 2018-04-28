@@ -1,0 +1,5 @@
+var flt = 2.54
+var int = 5
+var str = "str"
+var unknown = flt + " " + int + " " + str
+print unknown

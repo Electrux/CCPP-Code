@@ -1,0 +1,6 @@
+fn testfunc( prompt ):
+	print prompt
+	ret fetch
+
+var res = testfunc( 'please enter something: ' )
+print 'You entered: {0}' res

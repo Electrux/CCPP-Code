@@ -91,7 +91,7 @@ ErrorTypes ExecuteGetEnv( const std::vector< DataType::Data > & dataline, DataTy
 ErrorTypes ExecuteExecCommand( const std::vector< DataType::Data > & dataline, DataType::Data & result )
 {
 	if( dataline.size() < 3 ) {
-		std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": Syntax for setenv is - getenv < variable >"
+		std::cerr << "Error on line: " << dataline[ 0 ].fileline << ": Syntax for setenv is - exec < command >"
 			<< std::endl;
 		return SYNTAX_ERROR;
 	}

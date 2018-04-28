@@ -1,0 +1,87 @@
+print '{m}Creating directories ...{nl}'
+
+print '{y}=> {b}buildfiles/src ... '
+var res = exec 'mkdir -p buildfiles/src'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}buildfiles/src/LineTypeHandler ... '
+res = exec 'mkdir -p buildfiles/src/LineTypeHandler'
+print '{o}{0}{nl}' res
+
+print '{m}Compiling project ...{nl}'
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Executor.cpp -o buildfiles/src/Executor.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Executor.cpp -o buildfiles/src/Executor.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/General.cpp -o buildfiles/src/LineTypeHandler/General.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/General.cpp -o buildfiles/src/LineTypeHandler/General.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/Input.cpp -o buildfiles/src/LineTypeHandler/Input.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/General.cpp -o buildfiles/src/LineTypeHandler/General.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/Environment.cpp -o buildfiles/src/LineTypeHandler/Environment.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/Environment.cpp -o buildfiles/src/LineTypeHandler/Environment.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/Print.cpp -o buildfiles/src/LineTypeHandler/Print.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/Print.cpp -o buildfiles/src/LineTypeHandler/Print.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/ModuleLoader.cpp -o buildfiles/src/LineTypeHandler/ModuleLoader.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/ModuleLoader.cpp -o buildfiles/src/LineTypeHandler/ModuleLoader.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/Var.cpp -o buildfiles/src/LineTypeHandler/Var.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/Var.cpp -o buildfiles/src/LineTypeHandler/Var.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/LineTypeHandler/Return.cpp -o buildfiles/src/LineTypeHandler/Return.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/LineTypeHandler/Return.cpp -o buildfiles/src/LineTypeHandler/Return.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Vars.cpp -o buildfiles/src/Vars.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Vars.cpp -o buildfiles/src/Vars.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/GlobalData.cpp -o buildfiles/src/GlobalData.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/GlobalData.cpp -o buildfiles/src/GlobalData.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Lexer.cpp -o buildfiles/src/Lexer.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Lexer.cpp -o buildfiles/src/Lexer.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Stack.cpp -o buildfiles/src/Stack.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Stack.cpp -o buildfiles/src/Stack.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/DataTypes.cpp -o buildfiles/src/DataTypes.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/DataTypes.cpp -o buildfiles/src/DataTypes.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/ExpressionEvaluator.cpp -o buildfiles/src/ExpressionEvaluator.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/ExpressionEvaluator.cpp -o buildfiles/src/ExpressionEvaluator.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/StringFuncs.cpp -o buildfiles/src/StringFuncs.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/StringFuncs.cpp -o buildfiles/src/StringFuncs.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Errors.cpp -o buildfiles/src/Errors.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Errors.cpp -o buildfiles/src/Errors.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -c src/Functions.cpp -o buildfiles/src/Functions.cpp.o ... '
+res = exec 'clang++ -O2 -std=c++14 -c src/Functions.cpp -o buildfiles/src/Functions.cpp.o'
+print '{o}{0}{nl}' res
+
+print '{m}Building ...{nl}'
+
+print '{y}=> {b}clang++ -O2 -std=c++14  -g -o buildfiles/esil src/main.cpp buildfiles/src/Executor.cpp.o buildfiles/src/LineTypeHandler/General.cpp.o buildfiles/src/LineTypeHandler/Input.cpp.o buildfiles/src/LineTypeHandler/Environment.cpp.o buildfiles/src/LineTypeHandler/Print.cpp.o buildfiles/src/LineTypeHandler/ModuleLoader.cpp.o buildfiles/src/LineTypeHandler/Var.cpp.o buildfiles/src/LineTypeHandler/Return.cpp.o buildfiles/src/Vars.cpp.o buildfiles/src/GlobalData.cpp.o buildfiles/src/Lexer.cpp.o buildfiles/src/Stack.cpp.o buildfiles/src/DataTypes.cpp.o buildfiles/src/ExpressionEvaluator.cpp.o buildfiles/src/StringFuncs.cpp.o buildfiles/src/Errors.cpp.o buildfiles/src/Functions.cpp.o ... '
+
+res = exec 'clang++ -O2 -std=c++14  -g -o buildfiles/esil src/main.cpp buildfiles/src/Executor.cpp.o buildfiles/src/LineTypeHandler/General.cpp.o buildfiles/src/LineTypeHandler/Input.cpp.o buildfiles/src/LineTypeHandler/Environment.cpp.o buildfiles/src/LineTypeHandler/Print.cpp.o buildfiles/src/LineTypeHandler/ModuleLoader.cpp.o buildfiles/src/LineTypeHandler/Var.cpp.o buildfiles/src/LineTypeHandler/Return.cpp.o buildfiles/src/Vars.cpp.o buildfiles/src/GlobalData.cpp.o buildfiles/src/Lexer.cpp.o buildfiles/src/Stack.cpp.o buildfiles/src/DataTypes.cpp.o buildfiles/src/ExpressionEvaluator.cpp.o buildfiles/src/StringFuncs.cpp.o buildfiles/src/Errors.cpp.o buildfiles/src/Functions.cpp.o'
+
+print '{o}{0}{nl}' res

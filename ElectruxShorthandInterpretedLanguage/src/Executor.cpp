@@ -51,7 +51,7 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 		}
 		std::vector< DataType::Data > argnames;
 		Function::GetArgs( alldata[ line ], argnames );
-		auto err = func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
+		err = func->ExecuteFunction( argnames, alldata[ line ][ 0 ].fileline );
 	}
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::RETURN ) {
 		err = ExecuteReturn( alldata[ line ] );
@@ -61,6 +61,9 @@ ErrorTypes ExecuteStatement( const std::vector< std::vector< DataType::Data > > 
 	}
 	else if( alldata[ line ][ 1 ].type == DataType::KEYWORD && alldata[ line ][ 1 ].detailtype == DataType::SETENV ) {
 		err = ExecuteSetEnv( alldata[ line ] );
+	}
+	else if( alldata[ line ][ 1 ].type == DataType::IDENTIFIER ) {
+		err = ExecuteGeneral( alldata[ line ] );
 	}
 
 	return err;

@@ -7,5 +7,6 @@
 #include "LineTypeHandler/Return.hpp"
 #include "LineTypeHandler/Environment.hpp"
 #include "LineTypeHandler/ModuleLoader.hpp"
+#include "LineTypeHandler/General.hpp"
 
 #endif // LINETYPEINCS_HPP

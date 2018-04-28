@@ -1,0 +1,2 @@
+var v = fetch
+print "Variable = {0}" v

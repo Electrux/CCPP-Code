@@ -1,0 +1,3 @@
+print 'Fetching clang version:{nl}'
+var res = exec 'clang --version'
+print 'Result: {0}' res
