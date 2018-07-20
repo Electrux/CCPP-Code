@@ -34,7 +34,7 @@ NOTE 2: There is still a lot of work to be done on the client and server side.
 Directory is:
     C:\<user-name>.db
 and
-    C:\Groups\<groups>.db
+    C:\Groups\\<groups>.db
 
 For changing the base directory, you need to change the defaultdbdir global variable in:
     Auth-server/includes/Data.hpp
