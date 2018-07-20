@@ -23,7 +23,7 @@ Contains 3 parts:
 
 You just have to type the message directly when the black GUI screen opens up after going through the credentials in client.
 
-All the groups and accounts created are saved in /Groups/<group-name>.db file and <account-name>.db file.
+All the groups and accounts created are saved in `Groups/<group-name>.db` file and `<account-name>.db` file.
 
 
 
