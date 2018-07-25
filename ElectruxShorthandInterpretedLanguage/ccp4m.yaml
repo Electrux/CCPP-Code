@@ -13,5 +13,3 @@ builds:
     main_src: src/main.cpp
     other_src:
       - src/(.*).cpp
-    exclude:
-      - src/tests/(.*).cpp
