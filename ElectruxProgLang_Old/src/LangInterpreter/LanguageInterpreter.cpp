@@ -18,7 +18,6 @@ int Interpreter::Interpret()
 		return false;
 
 	for( int i = 0; i < ( int )lines.size(); ) {
-
 		int retval = ExecuteLine( lines, i );
 		if( retval != OK )
 			return retval;

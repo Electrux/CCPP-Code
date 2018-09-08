@@ -25,7 +25,7 @@ int net_argv_size( const int argc, const char ** argv )
 	return count;
 }
 
-char *get_output_file_name( const struct String *src)
+char *get_output_file_name( const struct String *src )
 {
 	int loc = 0;
 	for( int i = 0; src->str[ i ] != '\0'; ++i )

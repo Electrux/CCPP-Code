@@ -1,3 +1,5 @@
+#include <string>
+
 std::string dispnumwithcomma(int num)
 {
 	std::string str = std::to_string(num);
