@@ -1,32 +1,29 @@
-project( "Alacrity-Frontend" ) {
+project( "Ethereal Lang" ) {
 	version( 0.1 )
 	language( c, 11 )
 	license( bsd3 )
 	author( Electrux, "ElectruxRedsworth@gmail.com" )
 }
 
-builds.add_c_flags( "-march=native", "-O2", "-flto", "-fPIC", "-pedantic", "-Wall", "-Wextra", "-Wno-unused-parameter" )
+builds.add_c_flags( "-march=native", "-O2", "-flto", "-fPIC", "-pedantic", "-Wall", "-Wextra", "-Wno-unused-parameter", "-D_DEFAULT_SOURCE" )
 
-if( "${OS}" == OS_LINUX ) {
-	builds.add_c_flags( "-D_GNU_SOURCE" )
+print( "Compiling src/parser.y ... " )
+eval( "%{bison -d src/parser.y -b src/parser}" )
+if( "${EXIT_STATUS}" == 0 ) {
+	print( "{g}success{0}\n" )
+} else {
+	print( "{r}failed{0}\n" )
 }
 
-use_lib( pthread )
-use_lib( dl )
+print( "Compiling src/lexer.l ... " )
+eval( "%{flex -o src/lex.yy.c src/lexer.l}" )
+if( "${EXIT_STATUS}" == 0 ) {
+	print( "{g}success{0}\n" )
+} else {
+	print( "{r}failed{0}\n" )
+}
 
 builds( bin ) {
-	sources( "src/(.*)\.c" )
-	build( al, "src/main.c" )
-}
-
-# Vector tests
-builds( test ) {
-	add_c_inc_dirs( "-I." )
-	sources( "src/vec.c" )
-	build( vec_insert,	"tests/vec/insert.c" )
-	build( vec_destroy,	"tests/vec/delete.c" )
-	build( vec_get,		"tests/vec/get.c" )
-	build( vec_count, 	"tests/vec/count.c" )
-	build( vec_all, 	"tests/vec/all.c" )
-	runtests()
+	sources( "src/lex.yy.c" )
+	build( parser, "src/parser.tab.c" )
 }
