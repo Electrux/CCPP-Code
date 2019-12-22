@@ -1,0 +1,25 @@
+{
+    "name": "feral",
+    "displayName": "feral",
+    "description": "feral language syntax highlighting for vs-code",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.41.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "feral",
+            "aliases": ["feral", "feral"],
+            "extensions": [".fer"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "feral",
+            "scopeName": "source.feral",
+            "path": "./syntaxes/feral.tmLanguage.json"
+        }]
+    }
+}

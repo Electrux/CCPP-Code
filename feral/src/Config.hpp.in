@@ -1,0 +1,18 @@
+/**
+ * @copyright Copyright (c) 2019, all rights reserved.<br/>
+ * This project uses the BSD 3-clause license,<br/>
+ * attached in the project root directory.<br/>
+ * 
+ */
+
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
+
+#define FERAL_VERSION_MAJOR @FERAL_VERSION_MAJOR@
+#define FERAL_VERSION_MINOR @FERAL_VERSION_MINOR@
+#define FERAL_VERSION_PATCH @FERAL_VERSION_PATCH@
+
+#define BUILD_CXX_COMPILER "@CMAKE_CXX_COMPILER_ID@ @CMAKE_CXX_COMPILER_VERSION@"
+#define BUILD_DATE "@BUILD_DATE@"
+
+#endif // CONFIG_HPP

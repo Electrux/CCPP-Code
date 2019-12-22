@@ -1,0 +1,93 @@
+#!/usr/bin/env feral
+
+# implicit
+ldmod( 'core' );
+
+let enum = import( 'std.enum' );
+# will also create namespace `vec` in this file
+# the vec() and namespace will have same name but will be
+# differentiated by the fact that one is function,
+# other is namespace; same for map
+let vec  = import( 'std.vec' ).make_vec;
+let map  = import( 'std.map' ).make_map;
+
+let i = 5 + 1, j = 9 - 1;
+
+let v = vec( 1, vec( 2, 3 ) );
+
+let v = vec(
+	5,  10, 15, 20,
+	25, 30, 35, 40,
+	45, 50, 55, 60
+);
+
+let s = map(
+	'x', 5,
+	'y', 10
+);
+
+let colors = enum.simple(
+	.RED,
+	.GREEN,
+	.BLUE,
+	.YELLOW
+);
+
+let long_data = `
+this is long data
+this was long data
+this will be long data
+this shall be long data
+this is a long data
+this is a long data
+`;
+
+# normal functions also can be used as variables (not just lambdas)
+let some = lambda( x = 10, y = 20 ) { return x * y; }
+let res = some();
+
+let mult10 = lambda( x ) { return x * 10; }
+let twenty = mult10( 2 );
+
+let Flavor = trait {
+	# returns a string representing the flavor
+	fn flavor();
+}
+
+let Calories = trait {
+	# returns an integer representing calorie count
+	fn count();
+}
+
+let Fruits = trait < Flavor, Calories {
+	fn name();
+	fn healthy?() { return self.cals < 100; }
+}
+
+let Apple = struct < Fruits {
+	let name = 'name';
+	let flavor = 'flavor';
+	let cals = 100;
+
+	fn __ctor__() { println( 'initializing ...' ); }
+
+	fn `==`( other ) { return self.name == other.name && self.flavor == other.flavor && self.cals == other.cals; }
+	fn `!=`( other ) {
+		return !self.`==`( other );
+		# or
+		return !( self == other );
+		# or (best performance)
+		return self.name != other.name || self.flavor != other.flavor || self.cals != other.cals;
+	}
+
+	# static fn based on static kw or self?
+	fn make_green() {
+		let obj = Apple();
+		obj.flavor = 'Wow!!!';
+		return obj;
+	}
+
+	fn name() { return self.name; }
+	fn flavor() { return self.flavor; }
+	fn count() { return self.count; }
+}

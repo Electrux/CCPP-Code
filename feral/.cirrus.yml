@@ -1,0 +1,43 @@
+# LTO is disabled on ubuntu 14.04 and freebsd 10.4
+# because clang 3.4 does work correctly with it
+task:
+  name: Ubuntu 14.04 gcc 4.8.4
+  container:
+    image: ubuntu:14.04
+  install_script: apt-get update && apt-get install -y libgmp-dev libmpfr-dev libmpc-dev g++ cmake make
+  compile_script: mkdir build && cd build && cmake .. && make -j$(nproc)
+
+task:
+  name: Ubuntu 14.04 clang 3.4.0
+  container:
+    image: teeks99/clang-ubuntu:3.4
+  env:
+    CXX: clang++-3.4
+    SKIP_LTO: true
+  install_script: apt update && apt install -y libgmp-dev libmpfr-dev libmpc-dev cmake make
+  compile_script: mkdir build && cd build && cmake .. && make -j$(nproc)
+
+task:
+  name: Debian 8 gcc 6.5.0
+  container:
+    image: gcc:6
+  env:
+    CXX: g++
+  install_script: apt update && apt install -y libgmp-dev libmpfr-dev libmpc-dev cmake make
+  compile_script: mkdir build && cd build && cmake .. && make -j$(nproc)
+
+task:
+  name: FreeBSD 10.4 clang 3.4.1
+  freebsd_instance:
+    image: freebsd-10-4-release-amd64
+  env:
+    SKIP_LTO: true
+  install_script: pkg install -y gmp mpfr mpc cmake
+  compile_script: mkdir build && cd build && cmake .. && make -j$(sysctl -n hw.ncpu)
+
+task:
+  name: macOS Mojave apple llvm 10.0.1
+  osx_instance:
+    image: mojave-base
+  install_script: brew install gmp mpfr libmpc cmake make
+  compile_script: mkdir build && cd build && cmake .. && make -j$(sysctl -n hw.ncpu)
